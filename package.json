@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+ssh://git@github.com/penumbragames/equilibrium.git"
   },
-  "author": "Alvin Lin, Kenneth Li",
+  "author": "Alvin Lin (omgimanerd), Kenneth Li (noobbyte)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/penumbragames/equilibrium/issues"
