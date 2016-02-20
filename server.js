@@ -58,11 +58,13 @@ io.on('connection', function(socket) {
 
   socket.on('create-room', function(data) {
     lobby.createRoom(data.room);
-    lobby.joinRoom(socket.id, data.room);
+    var status = lobby.joinRoom(data.room, socket.id);
+    socket.emit('create-room-status', status);
   });
 
   socket.on('join-room', function(data) {
-    lobby.joinRoom(socket.id, data.room);
+    var status = lobby.joinRoom(data.room, socket.id);
+    socket.emit('join-room-status', status);
   });
 
   socket.on('disconnect', function() {
@@ -83,5 +85,4 @@ server.listen(PORT_NUMBER, function() {
   if (DEV_MODE) {
     console.log('DEVELOPMENT MODE ENABLED: SERVING UNCOMPILED JAVASCRIPT!');
   }
-  console.log(lobby.freeUsers);
 });

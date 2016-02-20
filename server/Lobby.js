@@ -55,8 +55,17 @@ Lobby.prototype.createRoom = function(name) {
 };
 
 Lobby.prototype.joinRoom = function(name, socketId) {
-  var socket = this.freeSockets.remove(socketId);
-  var user = this.freeUsers.remove(socketId);
+  var socket = this.freeSockets.get(socketId);
+  var user = this.freeUsers.get(socketId);
+  if (user && socket) {
+    this.freeSockets.remove(socketId);
+    this.freeUsers.remove(socketId);
+  } else {
+    return {
+      success: false,
+      message: 'An unknown error occurred, please shoot yourself.'
+    }
+  }
   var room = this.rooms.get(name);
   if (room) {
     if (room.users.values().length >= 4) {
@@ -78,19 +87,19 @@ Lobby.prototype.joinRoom = function(name, socketId) {
   }
 };
 
-Lobby.prototype.remove = function(id) {
-  this.freeSockets.remove(id);
-  this.freeUsers.remove(id);
+Lobby.prototype.remove = function(socketId) {
+  this.freeSockets.remove(socketId);
+  this.freeUsers.remove(socketId);
   this.rooms.keys().forEach(function(current, index, array) {
-    this.rooms.get(current).sockets.remove(id);
-    this.rooms.get(current).users.remove(id);
+    this.rooms.get(current).sockets.remove(socketId);
+    this.rooms.get(current).users.remove(socketId);
   });
 };
 
 Lobby.prototype.formStatePacket = function() {
   var rooms = {}
   this.rooms.forEach(function(value, key) {
-    rooms[key] = value.users.values();
+    rooms[key] = value.users.values(); //.values();
   });
   return {
     freeUsers: this.freeUsers.values(),
