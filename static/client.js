@@ -1,6 +1,8 @@
 var socket = io();
 //var game = Game.create(socket, document.getElementById('canvas'));
 
+var x;
+
 $('document').ready(function() {
   console.log("test");
   $('#name-input').focus();
@@ -23,8 +25,7 @@ $('document').ready(function() {
   $('#name-submit').click(send_name);
 
   socket.on('lobby-update', function(data) {
-    console.log(data);
-    
+    x = data;
     $('#lobby-rooms').empty();
     $('#lobby-users').empty();
 
