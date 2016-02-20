@@ -1,5 +1,91 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: #bfbfbf;
+  font-family: Helvetica;
+  font-size: 16px;
+  height: 100%;
+  width: 100%;
+  }
 
+#container {
+  position: absolute;
+  width: 800px;
+  height: 600px;
+  top: 50%;
+  margin-top: -300px;
+  left: 50%;
+  margin-left: -400px;
+  background-color: #ffffff;
+  }
+
+#name-container {
+  position: relative;
+  width: 300px;
+  height: 40px;
+  padding: 0;
+  top: 50%;
+  margin-top: -20px;
+  left: 50%;
+  margin-left: -150px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  }
+
+#name-container input {
+  position: absolute;
+  height: 40px;
+  margin: 0;
+  padding: 5px;
+  border: 0;
+  box-sizing: border-box;
+  width: 50%;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  left: 0;
+  }
+
+#name-container button {
+  position: absolute;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  width: 50%;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background-color: #cce0ff;
+  right: 0;
+  }
+
+#name-container *:focus {  
+  outline: none;
+  border: 1px solid #ff6666;
+  }
+
+#lobby {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  }
+
+#lobby table {
+  height: 100%;
+  width: 100%;
+  }
+
+#lobby ul {
+  width: 30%;
+  height: 100%;
+  border: 5px solid #000000;
+  border-radius: 5px;
+  }
 
 #lobby li {
   list-style-type: none;
+  padding: 10px;
+  background-color: #ffffff;
+  width: 100px;
   }
