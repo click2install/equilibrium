@@ -6,10 +6,11 @@
 var gulp = require("gulp");
 
 var autoprefixer = require("gulp-autoprefixer");
-var closureCompiler = require("gulp-closure-compiler");
+var concat = require("gulp-concat");
 var cssnano = require("gulp-cssnano");
 var less = require("gulp-less");
 var rename = require("gulp-rename");
+var uglify = require("gulp-uglify");
 
 gulp.task("default", ["js", "less"]);
 
@@ -17,11 +18,9 @@ gulp.task("js", function() {
   return gulp.src(["./shared/*.js",
                    "./static/js/game/*.js",
                    "./static/js/*.js"])
-    .pipe(closureCompiler({
-      compilerPath: "bower_components/closure-compiler/compiler.jar",
-      fileName: "minified.js"
-    }))
-    .pipe(gulp.dest("./static/dist"));
+    .pipe(concat("minified.js"))
+    .pipe(uglify())
+    .pipe(gulp.dest("static/dist"));
 });
 
 gulp.task("less", function() {
@@ -37,9 +36,9 @@ gulp.task("less", function() {
 });
 
 gulp.task("watch-js", function() {
-  gulp.watch(["./shared/*.js",
-              "./static/js/*.js",
-              "./static/js/game/*.js"], ["js"]);
+ gulp.watch(["./shared/*.js",
+             "./static/js/*.js",
+             "./static/js/game/*.js"], ["js"]);
 });
 
 gulp.task("watch-less", function() {
@@ -47,8 +46,8 @@ gulp.task("watch-less", function() {
 });
 
 gulp.task("watch", function() {
-  gulp.watch(["./shared/*.js",
-              "./static/js/*.js",
-              "./static/js/game/*.js"], ["js"]);
+ gulp.watch(["./shared/*.js",
+             "./static/js/*.js",
+             "./static/js/game/*.js"], ["js"]);
   gulp.watch("./static/less/*.less", ["less"]);
 });
