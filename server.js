@@ -56,6 +56,11 @@ io.on('connection', function(socket) {
     lobby.addUser(socket.id, socket, data.name);
   });
 
+  socket.on('create-room', function(data) {
+    lobby.createRoom(data.room);
+    lobby.joinRoom(socket.id, data.room);
+  });
+
   socket.on('join-room', function(data) {
     lobby.joinRoom(socket.id, data.room);
   });
