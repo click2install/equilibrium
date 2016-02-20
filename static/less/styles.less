@@ -1,13 +1,20 @@
+// out: ../dist/minified.css, compress: true, autoprefixer: true
+/**
+ *
+ */
+
 html, body {
+  height: 100%;
+  min-height: 600px;
+  width: 100%;
+  min-width: 800px;
   margin: 0;
   padding: 0;
   border: 0;
   background-color: #bfbfbf;
   font-family: Helvetica;
   font-size: 16px;
-  height: 100%;
-  width: 100%;
-  }
+}
 
 #container {
   position: absolute;
@@ -18,7 +25,7 @@ html, body {
   left: 50%;
   margin-left: -400px;
   background-color: #ffffff;
-  }
+}
 
 #name-container {
   position: relative;
@@ -31,61 +38,56 @@ html, body {
   margin-left: -150px;
   border: 1px solid #000000;
   border-radius: 5px;
+
+  input, button {
+    position: absolute;
+    height: 40px;
+    margin: 0;
+    padding: 5px;
+    border: 0;
+    box-sizing: border-box;
+    width: 50%;
   }
 
-#name-container input {
-  position: absolute;
-  height: 40px;
-  margin: 0;
-  padding: 5px;
-  border: 0;
-  box-sizing: border-box;
-  width: 50%;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  left: 0;
+  input {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    left: 0;
   }
 
-#name-container button {
-  position: absolute;
-  height: 40px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  box-sizing: border-box;
-  width: 50%;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  background-color: #cce0ff;
-  right: 0;
+  button {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: #cce0ff;
+    right: 0;
   }
+}
 
-#name-container *:focus {  
+#name-container *:focus {
   outline: none;
-  border: 1px solid #ff6666;
-  }
+}
 
 #lobby {
   position: relative;
   height: 100%;
   width: 100%;
+
+  table {
+    height: 100%;
+    width: 100%;
   }
 
-#lobby table {
-  height: 100%;
-  width: 100%;
+  ul {
+    width: 30%;
+    height: 100%;
+    border: 5px solid #000000;
+    border-radius: 5px;
   }
 
-#lobby ul {
-  width: 30%;
-  height: 100%;
-  border: 5px solid #000000;
-  border-radius: 5px;
+  li {
+    list-style-type: none;
+    padding: 10px;
+    background-color: #ffffff;
+    width: 100px;
   }
-
-#lobby li {
-  list-style-type: none;
-  padding: 10px;
-  background-color: #ffffff;
-  width: 100px;
-  }
+}
