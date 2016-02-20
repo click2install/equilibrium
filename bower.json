@@ -18,7 +18,6 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.2.0",
-    "closure-compiler": "http://dl.google.com/closure-compiler/compiler-latest.zip"
+    "jquery": "~2.2.0"
   }
 }
