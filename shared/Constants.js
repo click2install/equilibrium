@@ -11,6 +11,8 @@ function Constants() {
   throw new Error('Constants should not be instantiated!');
 }
 
+Constants.ROOM_CAPACITY = 4;
+
 try {
   module.exports = Constants;
 } catch (err) {}
