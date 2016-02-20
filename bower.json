@@ -1,0 +1,24 @@
+{
+  "name": "equilibrium",
+  "description": "",
+  "main": "server.js",
+  "authors": [
+    "Alvin Lin",
+    "Kenneth Li"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/penumbragames/equilibrium",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.2.0",
+    "closure-compiler": "http://dl.google.com/closure-compiler/compiler-latest.zip"
+  }
+}
