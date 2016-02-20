@@ -2,6 +2,7 @@ var socket = io();
 //var game = Game.create(socket, document.getElementById('canvas'));
 
 $('document').ready(function() {
+  console.log("test");
   $('#name-input').focus();
 
   function send_name() {
