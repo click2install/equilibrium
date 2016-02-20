@@ -4,7 +4,7 @@ var socket = io();
 var x;
 
 $('document').ready(function() {
-  console.log("test");
+  $('#lobby').hide();
   $('#name-input').focus();
 
   function send_name() {
@@ -32,11 +32,14 @@ $('document').ready(function() {
     var rooms = []
     var freeUsers = []
 
-    $(data.rooms).each(function(name, room) {
-      rooms.push($('<li>').text(name + '&nbsp;&nbsp;&nbsp;&nbsp;'));          
+    $.each(data.rooms, function(name, users) {
+      rooms.push(
+        $('<li>')
+          .append($('<div>').text(name))
+          .append($('<div>').text(users.length + "/" + Constants.ROOM_CAPACITY)));
     });
 
-    $(data.freeUsers).each(function(i, freeUser) {
+    $.each(data.freeUsers, function(i, freeUser) {
       freeUsers.push($('<li>').text(freeUser));
     });
 
