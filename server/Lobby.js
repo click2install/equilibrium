@@ -28,7 +28,7 @@ Lobby.create = function() {
 
 /**
  * This method adds a new user to the lobby.
- * @param {string} socketId The id of the user's socket.
+ * @param {string} socketId The socket ID of the user.
  * @param {Socket} socket The socket of the user.
  * @param {string} username The username of the user.
  */
@@ -37,6 +37,12 @@ Lobby.prototype.addUser = function(socketId, socket, username) {
   this.freeUsers.set(socketId, username);
 };
 
+/**
+ * This method creates a room with the given name and returns an object
+ * detailing whether or not the room was created.
+ * @param {string} name The name of the room to create.
+ * @return {Object}
+ */
 Lobby.prototype.createRoom = function(name) {
   if (this.rooms.has(name)) {
     return {
@@ -54,6 +60,11 @@ Lobby.prototype.createRoom = function(name) {
   }
 };
 
+/**
+ * This method moves a player into a room.
+ * @param {string} name The name of the room to put the player into.
+ * @param {string} socketId The socket ID of the player to move.
+ */
 Lobby.prototype.joinRoom = function(name, socketId) {
   var socket = this.freeSockets.get(socketId);
   var user = this.freeUsers.get(socketId);
@@ -87,6 +98,10 @@ Lobby.prototype.joinRoom = function(name, socketId) {
   }
 };
 
+/**
+ * This method removes a player from the internal hashmaps.
+ * @param {string} socketId The socket ID of the palyer to remove.
+ */
 Lobby.prototype.remove = function(socketId) {
   this.freeSockets.remove(socketId);
   this.freeUsers.remove(socketId);
@@ -96,10 +111,15 @@ Lobby.prototype.remove = function(socketId) {
   });
 };
 
+/**
+ * This method returns a JSON object representation of the lobby that gets
+ * sent to the client.
+ * @return {Object}
+ */
 Lobby.prototype.formStatePacket = function() {
   var rooms = {}
   this.rooms.forEach(function(value, key) {
-    rooms[key] = value.users.values(); //.values();
+    rooms[key] = value.users.values();
   });
   return {
     freeUsers: this.freeUsers.values(),
