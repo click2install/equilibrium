@@ -22,10 +22,13 @@ var morgan = require('morgan');
 var socketIO = require('socket.io');
 var swig = require('swig');
 
+var Lobby = require('./server/Lobby');
+
 // Initialization.
 var app = express();
 var server = http.Server(app);
 var io = socketIO(server);
+var lobby = Lobby.create();
 
 app.engine('html', swig.renderFile);
 
@@ -49,12 +52,20 @@ app.get('/', function(request, response) {
 
 // Websocket handling
 io.on('connection', function(socket) {
+  socket.on('new-player', function(data) {
+    lobby.addUser(socket.id, socket, data.name);
+  });
+
+  socket.on('disconnect', function() {
+    lobby.remove(socket.id);
+  });
 });
 
 // Server side game loop, runs at 60Hz and sends out update packets to all
 // clients every tick.
 setInterval(function() {
-
+  var lobbyState = lobby.formStatePacket();
+  io.sockets.emit('lobby-update', lobbyState);
 }, FRAME_RATE);
 
 // Starts the server.
