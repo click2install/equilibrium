@@ -3,11 +3,17 @@
  * @author Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
-function Game() {
-
+function Game(player) {
+  this.players = players;
 }
 
 Game.create = function() {
+};
+
+Game.update = function() {
+};
+
+Game.sendState = function() {
 };
 
 module.exports = Game;

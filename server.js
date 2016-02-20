@@ -76,7 +76,7 @@ io.on('connection', function(socket) {
 // clients every tick.
 setInterval(function() {
   var lobbyState = lobby.formStatePacket();
-  io.sockets.emit('lobby-update', lobbyState);
+  io.emit('lobby-update', lobbyState);
 }, FRAME_RATE);
 
 // Starts the server.
