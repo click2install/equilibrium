@@ -83,4 +83,5 @@ server.listen(PORT_NUMBER, function() {
   if (DEV_MODE) {
     console.log('DEVELOPMENT MODE ENABLED: SERVING UNCOMPILED JAVASCRIPT!');
   }
+  console.log(lobby.freeUsers);
 });
