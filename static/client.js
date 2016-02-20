@@ -23,7 +23,23 @@ $('document').ready(function() {
   $('#name-submit').click(send_name);
 
   socket.on('lobby-update', function(data) {
-    var freeUsers = data.freeUsers;
-    var rooms = data.rooms;
+    console.log(data);
+    
+    $('#lobby-rooms').empty();
+    $('#lobby-users').empty();
+
+    var rooms = []
+    var freeUsers = []
+
+    $(data.rooms).each(function(name, room) {
+      rooms.push($('<li>').text(name + '&nbsp;&nbsp;&nbsp;&nbsp;'));          
+    });
+
+    $(data.freeUsers).each(function(i, freeUser) {
+      freeUsers.push($('<li>').text(freeUser));
+    });
+
+    $('#lobby-rooms').append.apply($('#lobby-rooms'), rooms);
+    $('#lobby-users').append.apply($('#lobby-users'), freeUsers);
   });
 });
