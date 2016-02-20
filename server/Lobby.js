@@ -13,7 +13,7 @@ function Lobby() {
   this.freeSockets = new Hashmap();
   this.freeUsers = new Hashmap();
   /**
-   *
+   * A Hashmap of rooms.
    */
   this.rooms = new Hashmap();
 }
@@ -40,17 +40,17 @@ Lobby.prototype.addUser = function(socketId, socket, username) {
 /**
  * This method creates a room with the given name and returns an object
  * detailing whether or not the room was created.
- * @param {string} name The name of the room to create.
+ * @param {string} room The name of the room to create.
  * @return {Object}
  */
-Lobby.prototype.createRoom = function(name) {
-  if (this.rooms.has(name)) {
+Lobby.prototype.createRoom = function(roomName) {
+  if (this.rooms.has(roomName)) {
     return {
       success: false,
       message: "Room already exists."
     }
   }
-  this.rooms.set(name, {
+  this.rooms.set(roomName, {
     sockets: new Hashmap(),
     users: new Hashmap()
   });
@@ -62,10 +62,10 @@ Lobby.prototype.createRoom = function(name) {
 
 /**
  * This method moves a player into a room.
- * @param {string} name The name of the room to put the player into.
+ * @param {string} roomName The name of the room to put the player into.
  * @param {string} socketId The socket ID of the player to move.
  */
-Lobby.prototype.joinRoom = function(name, socketId) {
+Lobby.prototype.joinRoom = function(roomName, socketId) {
   var socket = this.freeSockets.get(socketId);
   var user = this.freeUsers.get(socketId);
   if (user && socket) {
@@ -77,7 +77,7 @@ Lobby.prototype.joinRoom = function(name, socketId) {
       message: 'An unknown error occurred, please shoot yourself.'
     }
   }
-  var room = this.rooms.get(name);
+  var room = this.rooms.get(roomName);
   if (room) {
     if (room.users.values().length >= 4) {
       return {
@@ -99,16 +99,28 @@ Lobby.prototype.joinRoom = function(name, socketId) {
 };
 
 /**
+ * This method removes a room from the internal hashmaps.
+ * @param {string} roomName The name of the room to remove.
+ */
+Lobby.prototype.removeRoom = function(roomName) {
+  var room = this.rooms.get(roomName);
+  this.rooms.remove(roomName);
+  return room;
+};
+
+/**
  * This method removes a player from the internal hashmaps.
  * @param {string} socketId The socket ID of the palyer to remove.
  */
 Lobby.prototype.remove = function(socketId) {
   this.freeSockets.remove(socketId);
   this.freeUsers.remove(socketId);
-  this.rooms.keys().forEach(function(current, index, array) {
-    this.rooms.get(current).sockets.remove(socketId);
-    this.rooms.get(current).users.remove(socketId);
-  });
+  with (this) {
+    rooms.keys().forEach(function(current, index, array) {
+      rooms.get(current).sockets.remove(socketId);
+      rooms.get(current).users.remove(socketId);
+    });
+  }
 };
 
 /**
