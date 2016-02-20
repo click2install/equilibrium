@@ -9,6 +9,7 @@ var autoprefixer = require("gulp-autoprefixer");
 var concat = require("gulp-concat");
 var cssnano = require("gulp-cssnano");
 var less = require("gulp-less");
+var plumber = require("gulp-plumber");
 var rename = require("gulp-rename");
 var uglify = require("gulp-uglify");
 
@@ -18,6 +19,7 @@ gulp.task("js", function() {
   return gulp.src(["./shared/*.js",
                    "./static/js/game/*.js",
                    "./static/js/*.js"])
+    .pipe(plumber())
     .pipe(concat("minified.js"))
     .pipe(uglify())
     .pipe(gulp.dest("static/dist"));
@@ -25,6 +27,7 @@ gulp.task("js", function() {
 
 gulp.task("less", function() {
   return gulp.src("./static/less/styles.less")
+    .pipe(plumber())
     .pipe(less({ compress: true}))
     .pipe(autoprefixer())
     .pipe(cssnano())
