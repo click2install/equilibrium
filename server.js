@@ -59,15 +59,15 @@ io.on('connection', function(socket) {
     lobby.addUser(socket.id, socket, data.name);
   });
 
-  socket.on('create-room', function(data) {
+  socket.on('create-room', function(data, callback) {
     lobby.createRoom(data.room);
     var status = lobby.joinRoom(data.room, socket.id);
-    socket.emit('create-room-status', status);
+    callback(status);
   });
 
-  socket.on('join-room', function(data) {
+  socket.on('join-room', function(data, callback) {
     var status = lobby.joinRoom(data.room, socket.id);
-    socket.emit('join-room-status', status);
+    callback(status);
   });
 
   socket.on('leave-room', function(data) {
