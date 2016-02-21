@@ -62,7 +62,7 @@ Game.prototype.start = function() {
 Game.prototype.update = function() {
   with (this) {
     viewport.update(self.x, self.y);
-    var coords = viewport.toAbsoluteCOords(Input.MOUSE);
+    var coords = viewport.toAbsoluteCoords(Input.MOUSE);
     socket.emit('player-action', {
       mouseX: coords[0],
       mouseY: coords[1],
