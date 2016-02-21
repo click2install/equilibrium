@@ -1,5 +1,6 @@
 /**
- * This is a class that encapsulates in game entities.
+ * This is a class that encapsulates all entities with position, velocity,
+ * and acceleration.
  * @author Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
@@ -31,7 +32,16 @@ function Entity(x, y, vx, vy, ax, ay, hitboxSize) {
 }
 
 /**
- * Returns true if this entity has collided with the given entity.
+ * This method returns true if the given point is within the Entity's hitbox.
+ * Entity on point?
+ */
+Entity.prototype.isOnPoint = function(x, y) {
+  return Util.getEuclideanDistance2(this.x, this.y, x, y) <
+    (this.hitboxSize * this.hitboxSize);
+};
+
+/**
+ * This method returns true if this entity has collided with the given entity.
  * @param {Entity} other The entity to check collision against.
  */
 Entity.prototype.isCollidedWith = function(other) {
@@ -41,9 +51,8 @@ Entity.prototype.isCollidedWith = function(other) {
 };
 
 /**
- * Updates the entity's position based on its velocity according to
- * the amount of time the passed between this update and the last
- * update.
+ * This method updates the entity's position based on its velocity according to
+ * the amount of time the passed between this update and the last update.
  */
 Entity.prototype.update = function() {
   var currentTime = (new Date()).getTime();
