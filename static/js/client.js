@@ -2,6 +2,7 @@ var socket = io();
 var lobby = Lobby.create(socket, $('#lobby'));
 
 $('document').ready(function() {
+  lobby.hide();
   $('#name-input').focus();
 
   $('#name-form').submit(function() {

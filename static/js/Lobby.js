@@ -12,7 +12,8 @@ Lobby.create = function(socket, lobbyEl) {
 
 Lobby.prototype.init = function() {
   this.generate();
-
+  $('#lobby-current-room-container').hide();
+  
   with (this) {
     socket.on('lobby-update', function(data) {
       update(data);
@@ -155,8 +156,8 @@ Lobby.prototype.createRoom = function() {
       room: room
     }, function(status) {
       if (status.success) {
-        $('#lobby-create-form').hide();
-        $('#lobby-leave-form').show();
+        $('#lobby-rooms-container').hide();
+        $('#lobby-current-room-container').show();
         currentRoom = room;
       } else {
         window.alert(status.message);
@@ -171,8 +172,8 @@ Lobby.prototype.joinRoom = function(room) {
       room: room
     }, function(status) {
       if (status.success) {
-        $('#lobby-create-form').hide();
-        $('#lobby-leave-form').show();
+        $('#lobby-rooms-container').hide();
+        $('#lobby-current-room-container').show();
         currentRoom = room;
       } else {
         window.alert(status.message);
@@ -183,7 +184,7 @@ Lobby.prototype.joinRoom = function(room) {
 
 Lobby.prototype.leaveRoom = function() {
   socket.emit('leave-room', {});
-  $('#lobby-leave-form').hide();
-  $('#lobby-create-form').show();
-  currentRoom = '';
+  $('#lobby-current-room-container').hide();
+  $('#lobby-rooms-container').show();
+  this.currentRoom = '';
 }
