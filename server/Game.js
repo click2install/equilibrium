@@ -30,6 +30,10 @@ Game.create = function(sockets, users) {
   return game;
 };
 
+/**
+ * This method initializes the event listeners for the sockets after the
+ * Game object has been created.
+ */
 Game.prototype.init = function() {
   var players = this.players;
   this.sockets.forEach(function(socket, socketId) {
@@ -40,6 +44,9 @@ Game.prototype.init = function() {
   });
 };
 
+/**
+ * This method updates the state of all the entities in the game.
+ */
 Game.prototype.update = function() {
   var players = this.players.values();
   for (var player of players) {
@@ -56,10 +63,18 @@ Game.prototype.update = function() {
   }
 };
 
+/**
+ * This method returns whether or not this game has ended so that the game
+ * can be removed from the GameManager and the players returned to the Lobby.
+ */
 Game.prototype.hasEnded = function() {
   return false;
 };
 
+/**
+ * This method sends the current state of the game to the all the players
+ * connected to this game instance.
+ */
 Game.prototype.sendState = function() {
   var ids = this.sockets.keys();
   for (var id of ids) {
