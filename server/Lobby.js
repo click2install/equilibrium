@@ -146,12 +146,29 @@ Lobby.prototype.setReadyState = function(roomName, socketId, state) {
 };
 
 /**
+ * This method returns whether or not the given room is ready to start.
+ * @param {string} roomName The name of the room that the user is in.
+ */
+Lobby.prototype.isRoomReady = function(roomName) {
+  var room = this.rooms.get(roomName);
+  if (room && room.users.values().length > 1) {
+    return room.users.values().reduce(function(previous, current,
+                                               index, array) {
+      return previous.ready && current.ready;
+    });
+  }
+  return false;
+};
+
+/**
  * This method updates the lobby and removes empty rooms.
  */
 Lobby.prototype.update = function() {
-  for (var room of this.rooms.keys()) {
-    if (this.rooms.get(room).users.values().length == 0) {
-      this.removeRoom(room);
+  for (var roomName of this.rooms.keys()) {
+    if (this.rooms.get(roomName).users.values().length == 0) {
+      this.removeRoom(roomName);
+    } else if (this.isRoomReady(roomName)) {
+      console.log(roomName);
     }
   }
 };
