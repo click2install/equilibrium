@@ -21,6 +21,9 @@ Lobby.prototype.init = function() {
     socket.on('lobby-update', function(data) {
       update(data);
     });
+    socket.on('chat-server-to-client', function(data) {
+      receiveMessage(data);
+    });
   }
 }
 
@@ -210,11 +213,12 @@ Lobby.prototype.update = function(data) {
 Lobby.prototype.createRoom = function() {
   with (this) {
     var room = $('#lobby-create-input').val();
-
+    
     socket.emit('create-room', {
       room: room
     }, function(status) {
       if (status.success) {
+        $('#lobby-create-input').val('');
         enterRoom(room);
       } else {
         window.alert(status.message);
@@ -262,8 +266,13 @@ Lobby.prototype.toggleReady = function() {
 }
              
 Lobby.prototype.sendMessage = function() {
-  console.log($('#lobby-chat-input').val());
   socket.emit('chat-client-to-server', {
     message: $('#lobby-chat-input').val()
   });
+  $('#lobby-chat-input').val('');
+}
+
+Lobby.prototype.receiveMessage = function(data) {
+  $('#lobby-chat-history').append(
+    document.createTextNode('[' + data.name + '] ' + data.message + '\n'));
 }
