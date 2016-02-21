@@ -71,7 +71,7 @@ io.on('connection', function(socket) {
 
   socket.on('leave-room', function(data) {
     var user = lobby.remove(socket.id);
-    lobby.addUser(socket.id, socket, user.username);
+    lobby.addUser(socket.id, socket, user);
   });
 
   socket.on('start-game', function(data) {
