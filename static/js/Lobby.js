@@ -165,7 +165,7 @@ Lobby.prototype.generate = function() {
             $('<div>')
               .prop('id', 'lobby-users-title')
               .prop('class', 'lobby-title')
-              .text('Users'))
+              .text('Free Users'))
           .append(
             $('<ul>')
               .prop('id', 'lobby-users')
@@ -297,6 +297,9 @@ Lobby.prototype.enterRoom = function(room) {
   $('#lobby-rooms-container').hide();
   $('#lobby-current-room-title').text('Room ' + room);
   $('#lobby-current-room-container').show();
+  $('#lobby-chat-history')
+    .append(document.createTextNode('You have joined room ' + room + '.\n'))
+    .scrollTop($('#lobby-chat-history')[0].scrollHeight);  
   this.currentRoom = room;
   this.ready = false;
 }
@@ -308,6 +311,9 @@ Lobby.prototype.leaveRoom = function() {
   socket.emit('leave-room', {});
   $('#lobby-current-room-container').hide();
   $('#lobby-rooms-container').show();
+  $('#lobby-chat-history')
+    .append(document.createTextNode('You have left the room.\n'))
+    .scrollTop($('#lobby-chat-history')[0].scrollHeight);  
   this.currentRoom = '';
 }
 
