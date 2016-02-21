@@ -48,10 +48,9 @@ Lobby.prototype.getUsernameBySocketId = function(socketId) {
     return name;
   }
   for (var room of this.rooms.values()) {
-    for (var id of room.users.keys()) {
-      if (id == socketId) {
-        return room.users.get(id).user
-      }
+    var data = room.users.get(socketId);
+    if (data) {
+      return data.user;
     }
   }
   return '[Error]';
