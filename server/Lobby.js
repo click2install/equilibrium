@@ -158,7 +158,7 @@ Lobby.prototype.remove = function(socketId) {
     if (user) {
       this.rooms.get(roomName).sockets.remove(socketId);
       this.rooms.get(roomName).users.remove(socketId);
-      return user;
+      return user.user;
     }
   }
 };
