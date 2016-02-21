@@ -23,8 +23,6 @@ $('document').ready(function() {
 
   socket.on('lobby-update', function(data) {
     x = data;
-    $('#lobby-rooms').empty();
-    $('#lobby-users').empty();
 
     var rooms = []
     var freeUsers = []
@@ -51,6 +49,8 @@ $('document').ready(function() {
       freeUsers.push($('<li>').text(freeUser));
     });
 
+    $('#lobby-rooms').empty();
+    $('#lobby-users').empty();    
     $('#lobby-rooms').append.apply($('#lobby-rooms'), rooms);
     $('#lobby-users').append.apply($('#lobby-users'), freeUsers);
   });
