@@ -67,6 +67,14 @@ io.on('connection', function(socket) {
     socket.emit('join-room-status', status);
   });
 
+  socket.on('leave-room', function(data) {
+    lobby.remove(socket.id);
+  });
+
+  socket.on('start-game', function(data) {
+    gameManager.newGame(data.room);
+  });
+
   socket.on('disconnect', function() {
     lobby.remove(socket.id);
   });
@@ -75,6 +83,7 @@ io.on('connection', function(socket) {
 // Server side game loop, runs at 60Hz and sends out update packets to all
 // clients every tick.
 setInterval(function() {
+  lobby.update();
   var lobbyState = lobby.formStatePacket();
   io.emit('lobby-update', lobbyState);
 }, FRAME_RATE);

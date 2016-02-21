@@ -98,6 +98,14 @@ Lobby.prototype.joinRoom = function(roomName, socketId) {
   }
 };
 
+Lobby.prototype.update = function() {
+  for (var room of this.rooms.keys()) {
+    if (this.rooms.get(room).users.values().length == 0) {
+      this.removeRoom(room);
+    }
+  }
+};
+
 /**
  * This method removes a room from the internal hashmaps.
  * @param {string} roomName The name of the room to remove.
