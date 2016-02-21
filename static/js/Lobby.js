@@ -212,6 +212,7 @@ Lobby.prototype.enterRoom = function(room) {
   $('#lobby-current-room-title').text('Room ' + room);
   $('#lobby-current-room-container').show();
   this.currentRoom = room;
+  this.ready = false;
 }
 
 Lobby.prototype.leaveRoom = function() {
@@ -223,6 +224,7 @@ Lobby.prototype.leaveRoom = function() {
 
 Lobby.prototype.toggleReady = function() {
   this.ready = !this.ready;
+  $('#lobby-ready-submit').text(this.ready ? 'Unready' : 'Ready');
   socket.emit('set-ready-state', {
     room: this.currentRoom,
     state: this.ready
