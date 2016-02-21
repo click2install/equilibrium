@@ -38,6 +38,25 @@ Lobby.prototype.addUser = function(socketId, socket, username) {
 };
 
 /**
+ * This method looks up a user's name by their socket ID.
+ * @param {string} socketId The socket ID of the user.
+ * @return {string}
+ */
+Lobby.prototype.getUsernameBySocketId = function(socketId) {
+  var name = this.freeUsers.get(socketId);
+  if (name) {
+    return name;
+  }
+  this.rooms.forEach(function(room, roomName) {
+    room.users.forEach(function(username, socketIdInRoom) {
+      if (socketIdInRoom == socketId) {
+        return username;
+      }
+    });
+  });
+};
+
+/**
  * This method creates a room with the given name and returns an object
  * detailing whether or not the room was created.
  * @param {string} room The name of the room to create.
