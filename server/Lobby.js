@@ -117,17 +117,24 @@ Lobby.prototype.removeRoom = function(roomName) {
 };
 
 /**
- * This method removes a player from the internal hashmaps.
+ * This method removes a player from the internal hashmaps and returns their
+ * username.
  * @param {string} socketId The socket ID of the palyer to remove.
  */
 Lobby.prototype.remove = function(socketId) {
-  this.freeSockets.remove(socketId);
-  this.freeUsers.remove(socketId);
-  with (this) {
-    rooms.keys().forEach(function(current, index, array) {
-      rooms.get(current).sockets.remove(socketId);
-      rooms.get(current).users.remove(socketId);
-    });
+  var user = this.freeUsers.get(socketId);
+  if (user) {
+    this.freeSockets.remove(socketId);
+    this.freeUsers.remove(socketId);
+    return user;
+  }
+  for (var roomName of this.rooms.keys()) {
+    var user = this.rooms.get(roomName).users.get(socketId);
+    if (user) {
+      this.rooms.get(roomName).sockets.remove(socketId);
+      this.rooms.get(roomName).users.remove(socketId);
+      return user;
+    }
   }
 };
 
