@@ -60,8 +60,10 @@ io.on('connection', function(socket) {
   });
 
   socket.on('create-room', function(data, callback) {
-    lobby.createRoom(data.room);
-    var status = lobby.joinRoom(data.room, socket.id);
+    var status = lobby.createRoom(data.room);
+    if (status.success) {
+      status = lobby.joinRoom(data.room, socket.id);
+    }
     callback(status);
   });
 

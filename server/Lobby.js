@@ -50,6 +50,12 @@ Lobby.prototype.createRoom = function(roomName) {
       message: "Room already exists."
     }
   }
+  if (roomName == "") {
+    return {
+      success: false,
+      message: "Invalid room name."
+    }
+  }
   this.rooms.set(roomName, {
     sockets: new Hashmap(),
     users: new Hashmap()
@@ -110,10 +116,10 @@ Lobby.prototype.joinRoom = function(roomName, socketId) {
 Lobby.prototype.setReadyState = function(roomName, socketId, state) {
   var room = this.rooms.get(roomName);
   if (room) {
-    var user = room.get(user);
+    var user = room.users.get(socketId);
     if (user) {
-      room.set(user, {
-        user: user,
+      room.users.set(socketId, {
+        user: user.user,
         ready: state
       });
     }
