@@ -18,6 +18,8 @@ function Game(socket, containerEl, canvasEl, drawing, viewport, endGame) {
   this.entities = [];
 }
 
+var client, server;
+
 /**
  * Factory method for the Game class.
  * @param {Object} socket The socket associated with the current session.
@@ -48,7 +50,9 @@ Game.prototype.init = function() {
 Game.prototype.start = function() {
   this.containerEl.show();
   with (this) {
-    socket.on('game-update', function(data) {
+    socket.on('server-update', function(data) {
+      console.log(data);
+      server = data;
       updateVars(data);
     });
   }
@@ -70,6 +74,13 @@ Game.prototype.update = function() {
   with (this) {
     viewport.update(self.x, self.y);
     var coords = viewport.toAbsoluteCoords(Input.MOUSE);
+    client = {
+      self: self,
+      mouseX: coords[0],
+      mouseY: coords[1],
+      leftClick: Input.LEFT_CLICK,
+      rightClick: Input.RIGHT_CLICK
+    };      
     socket.emit('player-action', {
       mouseX: coords[0],
       mouseY: coords[1],
