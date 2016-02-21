@@ -1,5 +1,16 @@
-// Uses JQuery
+/**
+ * This class manages and updates the client lobby.
+ * @author Kenneth Li (kennethli.3470@gmail.com)
+ * @requires jQuery
+ */
 
+/**
+ * Constructor for the Lobby class.
+ * @param {Object} socket The socket associated with the current user.
+ * @param {Object} lobbyEl The container element for the lobby.
+ * @param {function()} startGame The callback function that starts the game based
+ *   on information from the server.
+ */
 function Lobby(socket, lobbyEl, startGame) {
   this.socket = socket;
   this.lobbyEl = lobbyEl;
@@ -8,12 +19,23 @@ function Lobby(socket, lobbyEl, startGame) {
   this.ready = false;
 }
 
-var x;
+var x; // Temporary debug variable
 
+/**
+ * Factory method for the Lobby class.
+ * @param {Object} socket The socket associated with the current user.
+ * @param {Object} lobbyEl The container element for the lobby.
+ * @param {function()} startGame The callback function that starts the game based
+ *   on information from the server.
+ * @return {Lobby}
+ */
 Lobby.create = function(socket, lobbyEl, startGame) {
   return new Lobby(socket, lobbyEl, startGame);
 }
 
+/**
+ * Initializes the lobby and starts listening for data packets from the server.
+ */
 Lobby.prototype.init = function() {
   this.generate();
   $('#lobby-current-room-container').hide();
@@ -28,6 +50,9 @@ Lobby.prototype.init = function() {
   }
 }
 
+/**
+ * Generates the DOM elements for the lobby and adds form actions.
+ */
 Lobby.prototype.generate = function() {
   with (this) {
     lobbyEl
@@ -58,7 +83,7 @@ Lobby.prototype.generate = function() {
                   .prop('type', 'submit')
                   .text('Create'))
               .submit(function(event) {
-                event.preventDefault();
+                event.preventDefault(); // Stops page from redirecting
                 createRoom();
               })))
       .append(
@@ -148,22 +173,32 @@ Lobby.prototype.generate = function() {
   }
 }
 
+/**
+ * Wrapper function to show the lobby.
+ */
 Lobby.prototype.show = function() {
   this.lobbyEl.show();
 }
 
+/**
+ * Wrapper function to hide the lobby.
+ */
 Lobby.prototype.hide = function() {
   this.lobbyEl.hide();
 }
 
+/**
+ * Updates the lobby with data from lobby-update packets.
+ * @param {Object} data The JSON object containing data from the server.
+ */
 Lobby.prototype.update = function(data) {
   with (this) {
     x = data;
     
-    if (data.gameStart) {
+    if (data.gameStart) { // Starts game if server sends a special packet with gameStart
       this.startGame();
     } else {
-      if (currentRoom == '') {
+      if (currentRoom == '') { // Updates list of all rooms if not already in a room
         var rooms = [];
         
         $.each(data.rooms, function(room, users) {
@@ -177,7 +212,7 @@ Lobby.prototype.update = function(data) {
                 $('<span>')
                   .prop('class', 'lobby-room-info')
                   .text(users.length + "/" + Constants.ROOM_CAPACITY))
-              .click(function(event) {
+              .click(function(event) { // Joins a room when clicked
                 event.preventDefault();
                 joinRoom(room);
               }));
@@ -185,7 +220,7 @@ Lobby.prototype.update = function(data) {
 
         $('#lobby-rooms').empty();
         $('#lobby-rooms').append.apply($('#lobby-rooms'), rooms);
-      } else {
+      } else { // Displays users in room if already in a room
         var users = [];
 
         $.each(data.rooms[currentRoom], function(i, user) {
@@ -205,6 +240,7 @@ Lobby.prototype.update = function(data) {
         $('#lobby-current-room-users').append.apply($('#lobby-current-room-users'), users);
       }
 
+      // Displays all users not in a room
       var freeUsers = [];
       
       $.each(data.freeUsers, function(i, freeUser) {
@@ -217,15 +253,18 @@ Lobby.prototype.update = function(data) {
   }
 }
 
+/**
+ * Creates a room in the lobby and automatically joins it.
+ */
 Lobby.prototype.createRoom = function() {
   with (this) {
-    var room = $('#lobby-create-input').val();
+    var room = $('#lobby-create-input').val(); // Gets room name from input field
     
     socket.emit('create-room', {
       room: room
     }, function(status) {
       if (status.success) {
-        $('#lobby-create-input').val('');
+        $('#lobby-create-input').val(''); // Clears input field after room is created.
         enterRoom(room);
       } else {
         window.alert(status.message);
@@ -234,6 +273,9 @@ Lobby.prototype.createRoom = function() {
   }
 }
 
+/**
+ * Joins an existing room in the lobby.
+ */
 Lobby.prototype.joinRoom = function(room) {
   with (this) {
     socket.emit('join-room', {
@@ -248,6 +290,9 @@ Lobby.prototype.joinRoom = function(room) {
   }
 }
 
+/**
+ * Changes main lobby interface to current room interface.
+ */
 Lobby.prototype.enterRoom = function(room) {
   $('#lobby-rooms-container').hide();
   $('#lobby-current-room-title').text('Room ' + room);
@@ -256,6 +301,9 @@ Lobby.prototype.enterRoom = function(room) {
   this.ready = false;
 }
 
+/**
+ * Leaves current room and changes interface.
+ */
 Lobby.prototype.leaveRoom = function() {
   socket.emit('leave-room', {});
   $('#lobby-current-room-container').hide();
@@ -263,6 +311,9 @@ Lobby.prototype.leaveRoom = function() {
   this.currentRoom = '';
 }
 
+/**
+ * Toggles ready status of player.
+ */
 Lobby.prototype.toggleReady = function() {
   this.ready = !this.ready;
   $('#lobby-ready-submit').text(this.ready ? 'Unready' : 'Ready');
@@ -271,14 +322,21 @@ Lobby.prototype.toggleReady = function() {
     state: this.ready
   });
 }
-             
+
+/**
+ * Sends chat message to server.
+ */
 Lobby.prototype.sendMessage = function() {
   socket.emit('chat-client-to-server', {
-    message: $('#lobby-chat-input').val()
+    message: $('#lobby-chat-input').val() // Reads chat message from input field
   });
-  $('#lobby-chat-input').val('');
+  $('#lobby-chat-input').val(''); // Clears input field after sending message
 }
 
+/**
+ * Receives chat messages from server.
+ * @param {Object} data The JSON object containing the name of sender and the message.
+ */
 Lobby.prototype.receiveMessage = function(data) {
   $('#lobby-chat-history')
     .append(document.createTextNode('[' + data.name + '] ' + data.message + '\n'))

@@ -1,3 +1,9 @@
+/**
+ * This driver manages all aspects of the client (socket, lobby, game).
+ * @author Kenneth Li (kennethli.3470@gmail.com)
+ * @requires jQuery
+ */
+
 var socket = io();
 var lobby = Lobby.create(socket,
                          $('#lobby-container'),
@@ -6,10 +12,11 @@ var lobby = Lobby.create(socket,
                          });
 var game = Game.create(socket,
                        $('#canvas-container'),
-                       function() {
+                       function() {  // function to end game passed as callback to game
                          endGame();
                        });
 
+// Initializes client interface with name input.
 $('document').ready(function() {
   lobby.hide();
   $('#name-input').focus();
@@ -30,15 +37,19 @@ $('document').ready(function() {
   init();
 });
 
+// Calls initialization functions for lobby and game objects.
 function init() {
   lobby.init();
   game.init();
 }
 
+// Starts the game, dictated by the lobby object.
 function startGame() {
+  lobby.hide();
   game.start();
 }
 
+// Ends the game and returns to the lobby, dictated by the game object.
 function endGame() {
   
 }
