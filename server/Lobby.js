@@ -86,7 +86,10 @@ Lobby.prototype.joinRoom = function(roomName, socketId) {
       }
     }
     room.sockets.set(socketId, socket);
-    room.users.set(socketId, user);
+    room.users.set(socketId, {
+      user: user,
+      ready: false
+    });
     return {
       success: true,
       message: "Room joined."
@@ -98,6 +101,28 @@ Lobby.prototype.joinRoom = function(roomName, socketId) {
   }
 };
 
+/**
+ * This method sets the ready state of a user in a room.
+ * @param {string} roomName The name of the room that the user is in.
+ * @param {string} socketId The socket ID of the user.
+ * @param {boolean} state The ready state to set the user to.
+ */
+Lobby.prototype.setReadyState = function(roomName, socketId, state) {
+  var room = this.rooms.get(roomName);
+  if (room) {
+    var user = room.get(user);
+    if (user) {
+      room.set(user, {
+        user: user,
+        ready: state
+      });
+    }
+  }
+};
+
+/**
+ * This method updates the lobby and removes empty rooms.
+ */
 Lobby.prototype.update = function() {
   for (var room of this.rooms.keys()) {
     if (this.rooms.get(room).users.values().length == 0) {

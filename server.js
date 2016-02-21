@@ -70,14 +70,13 @@ io.on('connection', function(socket) {
     callback(status);
   });
 
+  socket.on('set-ready-state', function(data) {
+    lobby.setReadyState(data.room, socket.id, data.state);
+  });
+
   socket.on('leave-room', function(data) {
     var user = lobby.remove(socket.id);
     lobby.addUser(socket.id, socket, user);
-  });
-
-  socket.on('start-game', function(data) {
-    var room = lobby.removeRoom(data.room);
-    gameManager.newGame(room);
   });
 
   socket.on('disconnect', function() {
