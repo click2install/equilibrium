@@ -12,6 +12,8 @@ function Constants() {
 }
 
 Constants.ROOM_CAPACITY = 4;
+Constants.CANVAS_WIDTH = 800;
+Constants.CANVAS_HEIGHT = 600;
 
 try {
   module.exports = Constants;
