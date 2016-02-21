@@ -56,7 +56,6 @@ Game.prototype.start = function() {
   this.containerEl.show();
   with (this) {
     socket.on('server-update', function(data) {
-      console.log(data);
       server = data;
       updateVars(data);
     });
