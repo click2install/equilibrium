@@ -48,12 +48,15 @@ Lobby.prototype.getUsernameBySocketId = function(socketId) {
     return name;
   }
   this.rooms.forEach(function(room, roomName) {
-    room.users.forEach(function(username, socketIdInRoom) {
+    room.users.forEach(function(data, socketIdInRoom) {
       if (socketIdInRoom == socketId) {
-        return username;
+        console.log(data.user);
+//        console.log(data.user, socketIdInRoom, socketId);
+        return data.user;
       }
     });
   });
+  return '[Error]';
 };
 
 /**
