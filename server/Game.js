@@ -21,8 +21,9 @@ Game.create = function(sockets, users) {
   for (var key of keys) {
     players.push(Player.create(sockets.get(key), users.get(key), 0, 0));
   }
-
-  return new Game(players);
+  var game = new Game(players);
+  game.init();
+  return game;
 };
 
 Game.prototype.init = function() {
@@ -55,7 +56,7 @@ Game.prototype.hasEnded = function() {
 };
 
 Game.prototype.sendState = function() {
-  for (var i = 0; i < this.players.length[i]; ++i) {
+  for (var i = 0; i < this.players.length; ++i) {
     var currentPlayer = this.players[i];
     currentPlayer.socket.emit('server-update', {
       self: currentPlayer,
