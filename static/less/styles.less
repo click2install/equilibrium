@@ -18,7 +18,11 @@ html, body {
 
 button {
   background-color: hsl(216, 100%, 85%);
-  cursor: pointer;
+
+  &:hover {
+    background-color: hsl(216, 100%, 80%);
+    cursor: pointer;
+    }
   }
 
 #container {
@@ -105,21 +109,21 @@ button {
     li {
       box-sizing: border-box;
       list-style-type: none;
-      background-color: hsl(216, 100%, 75%);
+      background-color: hsl(216, 100%, 85%);
       width: 100%;
       overflow: auto;
       margin-bottom: 5px;
 
       &:hover {
-        background-color: hsl(216, 100%, 70%);
+        background-color: hsl(216, 100%, 80%);
         cursor: pointer;
         }
 
-      .lobby-room-name {
+      .lobby-room-name, .lobby-current-room-user-name {
         float: left;
         }
 
-      .lobby-room-info {
+      .lobby-room-info, .lobby-current-room-user-ready {
         float: right;
         }
       }
@@ -127,9 +131,7 @@ button {
 
   .lobby-form {
     position: absolute;
-    left: 0;
     bottom: 0;
-    width: 100%;
     height: 30px;
     text-align: left;
     white-space: nowrap;
@@ -151,6 +153,9 @@ button {
   }
 
 #lobby-create-form {
+  width: 100%;
+  left: 0;
+  
   input {
     width: 70%;
     }
@@ -160,7 +165,19 @@ button {
     }
   }
 
+#lobby-ready-form {
+  width: 50%;
+  left: 0;
+
+  button {
+    width: 100%;
+    }
+  }
+
 #lobby-leave-form {
+  width: 50%;
+  right: 0;
+  
   button {
     width: 100%;
     }

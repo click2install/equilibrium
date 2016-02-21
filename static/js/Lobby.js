@@ -4,6 +4,7 @@ function Lobby(socket, lobbyEl) {
   this.socket = socket;
   this.lobbyEl = lobbyEl;
   this.currentRoom = '';
+  this.ready = false;
 }
 
 var x;
@@ -63,6 +64,19 @@ Lobby.prototype.generate = function() {
               .text('Room'))
           .append(
             $('<ul>').attr('id', 'lobby-current-room-users'))
+          .append(
+            $('<form>')
+              .attr('id', 'lobby-ready-form')
+              .attr('class', 'lobby-form')
+              .append(
+                $('<button>')
+                  .attr('id', 'lobby-ready-submit')
+                  .attr('type', 'submit')
+                  .text(ready ? 'Unready' : 'Ready'))
+              .submit(function(event) {
+                event.preventDefault();
+                toggleReady();
+              }))
           .append(
             $('<form>')
               .attr('id', 'lobby-leave-form')
@@ -145,7 +159,7 @@ Lobby.prototype.update = function(data) {
             .append(
               $('<span>')
                 .attr('class', 'lobby-current-room-user-ready')
-                .text(user.readyState)));
+                .text(user.ready ? 'Ready' : 'Not ready')));
       });
 
       $('#lobby-current-room-users').empty();
@@ -206,3 +220,12 @@ Lobby.prototype.leaveRoom = function() {
   $('#lobby-rooms-container').show();
   this.currentRoom = '';
 }
+
+Lobby.prototype.toggleReady = function() {
+  this.ready = !this.ready;
+  socket.emit('set-ready-state', {
+    room: this.currentRoom,
+    state: this.ready
+  });
+}
+             
