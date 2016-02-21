@@ -28,7 +28,12 @@ var client, server;
  * @return {Game}
  */
 Game.create = function(socket, containerEl, endGame) {
-  var canvasEl = $('<canvas>').prop('id', 'canvas');
+  var canvasEl =
+      $('<canvas>')
+      .prop('id', 'canvas')
+      .on('contextmenu', function(e) {
+        e.stopPropagation();
+      });
   var drawing = Drawing.create(canvasEl[0].getContext('2d'));
   var viewport = Viewport.create();
   return new Game(socket, containerEl, canvasEl, drawing, viewport, endGame);
@@ -51,7 +56,6 @@ Game.prototype.start = function() {
   this.containerEl.show();
   with (this) {
     socket.on('server-update', function(data) {
-      console.log(data);
       server = data;
       updateVars(data);
     });
