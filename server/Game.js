@@ -28,12 +28,26 @@ Game.create = function(sockets, users) {
 Game.prototype.init = function() {
   for (var player of this.players) {
     player.socket.on('player-action', function(data) {
-//      player.updateOnInput(data);
+      console.log(data);
+      player.updateOnInput(data.mouseX, data.mouseY,
+                           data.leftClick, data.rightClick);
     });
   }
 };
 
 Game.prototype.update = function() {
+  for (var player of this.players) {
+    var otherPlayers = this.players.filter(function(otherPlayer) {
+      return player != otherPlayer;
+    });
+    player.update(otherPlayers, this.entities);
+  }
+  for (var entity of this.entities) {
+    var otherEntities = this.entities.filter(function(otherEntity) {
+      return entity != otherEntity;
+    });
+    entity.update(this.players, otherEntities);
+  }
 };
 
 Game.prototype.hasEnded = function() {
