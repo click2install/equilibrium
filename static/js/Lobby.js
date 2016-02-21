@@ -262,7 +262,8 @@ Lobby.prototype.toggleReady = function() {
 }
              
 Lobby.prototype.sendMessage = function() {
+  console.log($('#lobby-chat-input').val());
   socket.emit('chat-client-to-server', {
-    message: $('lobby-chat-input').val()
+    message: $('#lobby-chat-input').val()
   });
 }
