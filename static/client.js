@@ -22,6 +22,7 @@ $('document').ready(function() {
   });
 
   socket.on('lobby-update', function(data) {
+    x = data;
     $('#lobby-rooms').empty();
     $('#lobby-users').empty();
 
