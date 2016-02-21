@@ -3,7 +3,7 @@
 function Lobby(socket, lobbyEl) {
   this.socket = socket;
   this.lobbyEl = lobbyEl;
-  this.idPrefix = lobbyEl.attr('id');
+  this.currentRoom = '';
 }
 
 Lobby.create = function(socket, lobbyEl) {
@@ -25,35 +25,42 @@ Lobby.prototype.generate = function() {
     lobbyEl
       .append(
         $('<div>')
-          .attr('id', idPrefix + '-rooms-container')
-          .attr('class', idPrefix + '-sidebar')
+          .attr('id', 'lobby-rooms-container')
+          .attr('class', 'lobby-sidebar')
           .text('Rooms')
           .append(
-            $('<ul>').attr('id', idPrefix + '-rooms'))
+            $('<ul>').attr('id', 'lobby-rooms'))
           .append(
             $('<form>')
-              .attr('id', idPrefix + '-create-form')
-              .attr('class', idPrefix + '-form')
+              .attr('id', 'lobby-create-form')
+              .attr('class', 'lobby-form')
               .append(
                 $('<input>')
-                  .attr('id', idPrefix + '-create-input')
+                  .attr('id', 'lobby-create-input')
                   .attr('placeholder', 'Enter room name'))
               .append(
                 $('<button>')
-                  .attr('id', idPrefix + '-create-submit')
+                  .attr('id', 'lobby-create-submit')
                   .attr('type', 'submit')
                   .text('Create'))
               .submit(function(event) {
                 event.preventDefault();
                 createRoom();
-              }))
+              })))
+      .append(
+        $('<div>')
+          .attr('id', 'lobby-current-room-container')
+          .attr('class', 'lobby-sidebar')
+          .text('Room ' + currentRoom)
+          .append(
+            $('<ul>').attr('id', 'lobby-current-room-users'))
           .append(
             $('<form>')
-              .attr('id', idPrefix + '-leave-form')
-              .attr('class', idPrefix + '-form')
+              .attr('id', 'lobby-leave-form')
+              .attr('class', 'lobby-form')
               .append(
                 $('<button>')
-                  .attr('id', idPrefix + '-leave-submit')
+                  .attr('id', 'lobby-leave-submit')
                   .attr('type', 'submit')
                   .text('Leave'))
               .submit(function(event) {
@@ -62,18 +69,18 @@ Lobby.prototype.generate = function() {
               })))
       .append(
         $('<div>')
-          .attr('id', idPrefix + '-chat-container')
-          .attr('class', idPrefix + '-middle')
+          .attr('id', 'lobby-chat-container')
+          .attr('class', 'lobby-middle')
           .text('Chat')
           .append(
-            $('<div>').attr('id', idPrefix + '-chat')))
+            $('<div>').attr('id', 'lobby-chat')))
       .append(
         $('<div>')
-          .attr('id', idPrefix + '-users-container')
-          .attr('class', idPrefix + '-sidebar')
+          .attr('id', 'lobby-users-container')
+          .attr('class', 'lobby-sidebar')
           .text('Users')
           .append(
-            $('<ul>').attr('id', idPrefix + '-users')));
+            $('<ul>').attr('id', 'lobby-users')));
   }
 }
 
@@ -86,46 +93,74 @@ Lobby.prototype.hide = function() {
 }
 
 Lobby.prototype.update = function(data) {
-  var rooms = [];
-  var freeUsers = [];
-
   with (this) {
-    $.each(data.rooms, function(room, users) {
-      rooms.push(
-        $('<li>')
-          .append(
-            $('<span>')
-              .attr('class', idPrefix + '-room-name')
-              .text(room))
-          .append(
-            $('<span>')
-              .attr('class', idPrefix + '-room-info')
-              .text(users.length + "/" + Constants.ROOM_CAPACITY))
-          .click(function() {
-            event.preventDefault();
-            joinRoom(room);
-          }));
-    });
+    if (currentRoom == '') {
+      var rooms = [];
+      
+      $.each(data.rooms, function(room, users) {
+        rooms.push(
+          $('<li>')
+            .append(
+              $('<span>')
+                .attr('class', 'lobby-room-name')
+                .text(room))
+            .append(
+              $('<span>')
+                .attr('class', 'lobby-room-info')
+                .text(users.length + "/" + Constants.ROOM_CAPACITY))
+            .click(function() {
+              event.preventDefault();
+              joinRoom(room);
+            }));
+      });
 
+      $('#lobby-rooms').empty();
+      $('#lobby-rooms').append.apply($('#lobby-rooms'), rooms);
+    } else {
+      var users = [];
+
+      $.each(data.rooms[currentRoom], function(i, user) {
+        users.push(
+          $('<li>')
+            .append(
+              $('<span>')
+                .attr('class', 'lobby-current-room-user-name')
+                .text(user.user))
+            .append(
+              $('<span>')
+                .attr('class', 'lobby-current-room-user-ready')
+                .text(user.readyState)));
+      });
+      
+      $('#lobby-current-room-users').empty();
+      $('#lobby-current-room-users').append.apply($('#lobby-current-room-users'), users);
+    }
+
+    var freeUsers = [];
+    
     $.each(data.freeUsers, function(i, freeUser) {
       freeUsers.push($('<li>').text(freeUser));
     });
 
-    $('#' + idPrefix + '-rooms').empty();
-    $('#' + idPrefix + '-users').empty();
-    $('#' + idPrefix + '-rooms').append.apply($('#' + idPrefix + '-rooms'), rooms);
-    $('#' + idPrefix + '-users').append.apply($('#' + idPrefix + '-users'), freeUsers);
+    $('#lobby-users').empty();
+    $('#lobby-users').append.apply($('#lobby-users'), freeUsers);
   }
 }
 
 Lobby.prototype.createRoom = function() {
   with (this) {
-    var room = $('#' + idPrefix + '-create-input').val();
+    var room = $('#lobby-create-input').val();
 
     socket.emit('create-room', {
       room: room
     }, function(status) {
-      enterRoom(status);
+      if (status.success) {
+        $('#lobby-create-form').hide();
+        $('#lobby-leave-form').show();
+        currentRoom = room;
+      } else {
+        window.alert(status.message);
+      }
     });
   }
 }
@@ -135,22 +170,20 @@ Lobby.prototype.joinRoom = function(room) {
     socket.emit('join-room', {
       room: room
     }, function(status) {
-      enterRoom(status);
+      if (status.success) {
+        $('#lobby-create-form').hide();
+        $('#lobby-leave-form').show();
+        currentRoom = room;
+      } else {
+        window.alert(status.message);
+      }
     });
-  }
-}
-
-Lobby.prototype.enterRoom = function(status) {
-  if (status.success) {
-    $('#' + this.idPrefix + '-create-form').hide();
-    $('#' + this.idPrefix + '-leave-form').show();
-  } else {
-    window.alert(status.message);
   }
 }
 
 Lobby.prototype.leaveRoom = function() {
   socket.emit('leave-room', {});
-  $('#' + this.idPrefix + '-leave-form').hide();
-  $('#' + this.idPrefix + '-create-form').show();
+  $('#lobby-leave-form').hide();
+  $('#lobby-create-form').show();
+  currentRoom = '';
 }
