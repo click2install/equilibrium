@@ -3,6 +3,8 @@
  * @author Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
+var Player = require('./Player');
+
 function Game(players) {
   this.players = players;
 
