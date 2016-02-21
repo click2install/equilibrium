@@ -4,7 +4,6 @@
  */
 
 // Dependencies
-var shallowCopy = require('shallow-copy');
 var Hashmap = require('hashmap');
 
 var Player = require('./Player');
@@ -44,7 +43,7 @@ Game.prototype.init = function() {
 Game.prototype.update = function() {
   var players = this.players.values();
   for (var player of players) {
-    var otherPlayers = this.players.filter(function(otherPlayer) {
+    var otherPlayers = players.filter(function(otherPlayer) {
       return player != otherPlayer;
     });
     player.update(otherPlayers, this.entities);
