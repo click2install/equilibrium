@@ -102,6 +102,7 @@ Lobby.prototype.update = function(data) {
               .attr('class', idPrefix + '-room-info')
               .text(users.length + "/" + Constants.ROOM_CAPACITY))
           .click(function() {
+            event.preventDefault();
             joinRoom(room);
           }));
     });
@@ -127,8 +128,6 @@ Lobby.prototype.createRoom = function() {
       enterRoom(status);
     });
   }
-
-  return false;
 }
 
 Lobby.prototype.joinRoom = function(room) {
@@ -136,28 +135,22 @@ Lobby.prototype.joinRoom = function(room) {
     socket.emit('join-room', {
       room: room
     }, function(status) {
-      console.log(status);
+      enterRoom(status);
     });
   }
-
-  return false;
 }
 
 Lobby.prototype.enterRoom = function(status) {
-  console.log(status);
   if (status.success) {
     $('#' + this.idPrefix + '-create-form').hide();
     $('#' + this.idPrefix + '-leave-form').show();
   } else {
     window.alert(status.message);
   }
-
-  return false;
 }
 
 Lobby.prototype.leaveRoom = function() {
   socket.emit('leave-room', {});
   $('#' + this.idPrefix + '-leave-form').hide();
   $('#' + this.idPrefix + '-create-form').show();
-  return false;
 }
