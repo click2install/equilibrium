@@ -5,8 +5,7 @@
 
 var Entity = require('./Entity');
 
-function Player(socket, name, x, y) {
-  this.socket = socket;
+function Player(name, x, y) {
   this.name = name;
 
   this.hp = Player.MAX_HEALTH;
@@ -21,8 +20,8 @@ Player.inheritsFrom(Entity);
 Player.MAX_HEALTH = 100;
 Player.DEFAULT_WEIGHT = 10;
 
-Player.create = function(socket, name, x, y) {
-  return new Player(socket, name, x, y);
+Player.create = function(name, x, y) {
+  return new Player(name, x, y);
 };
 
 /**
@@ -41,6 +40,10 @@ Player.prototype.updateOnInput = function(mouseX, mouseY,
   // TODO: Add acceleration and velocity modifiers.
 };
 
+/**
+ * This method updates the player and checks for collisions against other
+ * players and entities.
+ */
 Player.prototype.update = function(players, entities) {
   this.parent.update.call(this);
 };

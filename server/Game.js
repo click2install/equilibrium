@@ -3,9 +3,14 @@
  * @author Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
+// Dependencies
+var shallowCopy = require('shallow-copy');
+var Hashmap = require('hashmap');
+
 var Player = require('./Player');
 
-function Game(players) {
+function Game(sockets, players) {
+  this.sockets = sockets;
   this.players = players;
 
   this.entities = [];
@@ -17,27 +22,28 @@ function Game(players) {
  */
 Game.create = function(sockets, users) {
   var keys = sockets.keys();
-  var players = [];
+  var players = new Hashmap();
   for (var key of keys) {
-    players.push(Player.create(sockets.get(key), users.get(key), 0, 0));
+    players.set(key, Player.create(users.get(key).user, 0, 0));
   }
-  var game = new Game(players);
+  var game = new Game(sockets, players);
   game.init();
   return game;
 };
 
 Game.prototype.init = function() {
-  for (var player of this.players) {
-    player.socket.on('player-action', function(data) {
-      console.log(data);
-      player.updateOnInput(data.mouseX, data.mouseY,
-                           data.leftClick, data.rightClick);
+  var players = this.players;
+  this.sockets.forEach(function(socket, socketId) {
+    socket.on('player-action', function(data) {
+      players.get(socketId).updateOnInput(data.mouseX, data.mouseY,
+                                          data.leftClick, data.rightClick);
     });
-  }
+  });
 };
 
 Game.prototype.update = function() {
-  for (var player of this.players) {
+  var players = this.players.values();
+  for (var player of players) {
     var otherPlayers = this.players.filter(function(otherPlayer) {
       return player != otherPlayer;
     });
@@ -47,7 +53,7 @@ Game.prototype.update = function() {
     var otherEntities = this.entities.filter(function(otherEntity) {
       return entity != otherEntity;
     });
-    entity.update(this.players, otherEntities);
+    entity.update(players, otherEntities);
   }
 };
 
@@ -56,11 +62,14 @@ Game.prototype.hasEnded = function() {
 };
 
 Game.prototype.sendState = function() {
-  for (var i = 0; i < this.players.length; ++i) {
-    var currentPlayer = this.players[i];
-    currentPlayer.socket.emit('server-update', {
+  var ids = this.sockets.keys();
+  for (var id of ids) {
+    var currentSocket = this.sockets.get(id);
+    var currentPlayer = this.players.get(id);
+    console.log(id, currentPlayer);
+    currentSocket.emit('server-update', {
       self: currentPlayer,
-      players: this.players.filter(function(player) {
+      players: this.players.values().filter(function(player) {
         return player != currentPlayer;
       }),
       entities: this.entities
