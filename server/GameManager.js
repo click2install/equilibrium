@@ -47,13 +47,13 @@ GameManager.prototype.newGame = function(room) {
  */
 GameManager.prototype.update = function(endGameCallback) {
   for (var i = 0; i < this.games.length; ++i) {
-    if (game.hasEnded()) {
+    if (this.games[i].hasEnded()) {
       var game = this.games.splice(i, 1);
       i--;
       endGameCallback(game);
     }
-    game.update();
-    game.sendState();
+    this.games[i].update();
+    this.games[i].sendState();
   }
 };
 
