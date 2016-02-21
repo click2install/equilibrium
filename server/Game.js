@@ -55,7 +55,8 @@ Game.prototype.hasEnded = function() {
 };
 
 Game.prototype.sendState = function() {
-  for (var currentPlayer of this.players) {
+  for (var i = 0; i < this.players.length[i]; ++i) {
+    var currentPlayer = this.players[i];
     currentPlayer.socket.emit('server-update', {
       self: currentPlayer,
       players: this.players.filter(function(player) {
