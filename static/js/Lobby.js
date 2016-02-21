@@ -1,16 +1,17 @@
 // Uses JQuery
 
-function Lobby(socket, lobbyEl) {
+function Lobby(socket, lobbyEl, startGame) {
   this.socket = socket;
   this.lobbyEl = lobbyEl;
+  this.startGame = startGame;
   this.currentRoom = '';
   this.ready = false;
 }
 
 var x;
 
-Lobby.create = function(socket, lobbyEl) {
-  return new Lobby(socket, lobbyEl);
+Lobby.create = function(socket, lobbyEl, startGame) {
+  return new Lobby(socket, lobbyEl, startGame);
 }
 
 Lobby.prototype.init = function() {
@@ -120,7 +121,8 @@ Lobby.prototype.generate = function() {
               .append(
                 $('<input>')
                   .prop('id', 'lobby-chat-input')
-                  .prop('placeholder', 'Enter message here'))
+                  .prop('placeholder', 'Enter message here')
+                  .prop('autocomplete', false))
               .append(
                 $('<button>')
                   .prop('id', 'lobby-chat-submit')
@@ -157,56 +159,61 @@ Lobby.prototype.hide = function() {
 Lobby.prototype.update = function(data) {
   with (this) {
     x = data;
-    if (currentRoom == '') {
-      var rooms = [];
-      
-      $.each(data.rooms, function(room, users) {
-        rooms.push(
-          $('<li>')
-            .append(
-              $('<span>')
-                .prop('class', 'lobby-room-name')
-                .text(room))
-            .append(
-              $('<span>')
-                .prop('class', 'lobby-room-info')
-                .text(users.length + "/" + Constants.ROOM_CAPACITY))
-            .click(function(event) {
-              event.preventDefault();
-              joinRoom(room);
-            }));
-      });
-
-      $('#lobby-rooms').empty();
-      $('#lobby-rooms').append.apply($('#lobby-rooms'), rooms);
-    } else {
-      var users = [];
-
-      $.each(data.rooms[currentRoom], function(i, user) {
-        users.push(
-          $('<li>')
-            .append(
-              $('<span>')
-                .prop('class', 'lobby-current-room-user-name')
-                .text(user.user))
-            .append(
-              $('<span>')
-                .prop('class', 'lobby-current-room-user-ready')
-                .text(user.ready ? 'Ready' : 'Not ready')));
-      });
-
-      $('#lobby-current-room-users').empty();
-      $('#lobby-current-room-users').append.apply($('#lobby-current-room-users'), users);
-    }
-
-    var freeUsers = [];
     
-    $.each(data.freeUsers, function(i, freeUser) {
-      freeUsers.push($('<li>').text(freeUser));
-    });
+    if (data.gameStart) {
+      this.startGame();
+    } else {
+      if (currentRoom == '') {
+        var rooms = [];
+        
+        $.each(data.rooms, function(room, users) {
+          rooms.push(
+            $('<li>')
+              .append(
+                $('<span>')
+                  .prop('class', 'lobby-room-name')
+                  .text(room))
+              .append(
+                $('<span>')
+                  .prop('class', 'lobby-room-info')
+                  .text(users.length + "/" + Constants.ROOM_CAPACITY))
+              .click(function(event) {
+                event.preventDefault();
+                joinRoom(room);
+              }));
+        });
 
-    $('#lobby-users').empty();
-    $('#lobby-users').append.apply($('#lobby-users'), freeUsers);
+        $('#lobby-rooms').empty();
+        $('#lobby-rooms').append.apply($('#lobby-rooms'), rooms);
+      } else {
+        var users = [];
+
+        $.each(data.rooms[currentRoom], function(i, user) {
+          users.push(
+            $('<li>')
+              .append(
+                $('<span>')
+                  .prop('class', 'lobby-current-room-user-name')
+                  .text(user.user))
+              .append(
+                $('<span>')
+                  .prop('class', 'lobby-current-room-user-ready')
+                  .text(user.ready ? 'Ready' : 'Not ready')));
+        });
+
+        $('#lobby-current-room-users').empty();
+        $('#lobby-current-room-users').append.apply($('#lobby-current-room-users'), users);
+      }
+
+      var freeUsers = [];
+      
+      $.each(data.freeUsers, function(i, freeUser) {
+        freeUsers.push($('<li>').text(freeUser));
+      });
+
+      $('#lobby-users').empty();
+      $('#lobby-users').append.apply($('#lobby-users'), freeUsers);
+    }
   }
 }
 
