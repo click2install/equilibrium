@@ -27,7 +27,7 @@ function Game(socket, containerEl, canvasEl, drawing, viewport, endGame) {
  */
 Game.create = function(socket, containerEl, endGame) {
   var canvasEl = $('<canvas>').prop('id', 'canvas');
-  var drawing = Drawing.create(this, canvasEl);
+  var drawing = Drawing.create(canvasEl[0].getContext('2d'));
   var viewport = Viewport.create();
   return new Game(socket, containerEl, canvasEl, drawing, viewport, endGame);
 }
@@ -76,5 +76,18 @@ Game.prototype.update = function() {
  * Draws the game to the canvas.
  */
 Game.prototype.draw = function() {
-
+  this.drawing.clear();
+  
+  for (var player of this.players) {
+    var coords = this.viewport.toCanvasCoords([player.x, player.y]);
+    this.drawing.drawPlayer(coords, player.weight);
+  }
+  
+  for (var entity of this.entities) {
+    var coords = this.viewport.toCanvasCoords([entity.x, entity.y]);
+    this.drawing.drawEntity(coords, entity.weight);
+  }
+  
+  var coords = this.viewport.toCanvasCoords([self.x, self.y]);
+  this.drawing.drawSelf(coords, self.weight);
 }
