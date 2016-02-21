@@ -315,6 +315,7 @@ Lobby.prototype.leaveRoom = function() {
     .append(document.createTextNode('You have left the room.\n'))
     .scrollTop($('#lobby-chat-history')[0].scrollHeight);  
   this.currentRoom = '';
+  this.ready = false;
 }
 
 /**

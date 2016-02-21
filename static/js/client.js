@@ -47,9 +47,18 @@ function init() {
 function startGame() {
   lobby.hide();
   game.start();
+  animate();
 }
 
 // Ends the game and returns to the lobby, dictated by the game object.
 function endGame() {
   
 }
+
+// Animates the game at 60 FPS using the requestAnimFrame script.
+function animate() {
+  game.update();
+  game.draw();
+  window.requestAnimFrame(animate);
+}
+

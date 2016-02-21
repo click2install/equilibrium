@@ -6,12 +6,16 @@
  * @param {Object} drawing The drawing object associated with the game.
  * @param {function()} endGame The callback used to end the game and return to the lobby.
  */
-function Game(socket, containerEl, canvasEl, drawing, endGame) {
+function Game(socket, containerEl, canvasEl, drawing, viewport, endGame) {
   this.socket = socket;
   this.containerEl = containerEl;
   this.canvasEl = canvasEl;
   this.drawing = drawing;
+  this.viewport = viewport;
   this.endGame = endGame;
+  this.self = {};
+  this.players = [];
+  this.entities = [];
 }
 
 /**
@@ -24,7 +28,8 @@ function Game(socket, containerEl, canvasEl, drawing, endGame) {
 Game.create = function(socket, containerEl, endGame) {
   var canvasEl = $('<canvas>').prop('id', 'canvas');
   var drawing = Drawing.create(this, canvasEl);
-  return new Game(socket, containerEl, canvasEl, drawing, endGame);
+  var viewport = Viewport.create();
+  return new Game(socket, containerEl, canvasEl, drawing, viewport, endGame);
 }
 
 /**
@@ -32,6 +37,8 @@ Game.create = function(socket, containerEl, endGame) {
  */
 Game.prototype.init = function() {
   this.containerEl.append(this.canvasEl);
+  Input.applyEventHandlers();
+  Input.addMouseTracker(this.canvasEl[0], 'canvas');
   this.drawing.init();
 }
 
@@ -40,4 +47,34 @@ Game.prototype.init = function() {
  */
 Game.prototype.start = function() {
   this.containerEl.show();
+  with (this) {
+    socket.on('game-update', function(data) {
+      self = data.self;
+      players = data.players;
+      entities = data.entities;
+    });
+  }
+}
+
+/**
+ * Updates the game.
+ */
+Game.prototype.update = function() {
+  with (this) {
+    viewport.update(self.x, self.y);
+    var coords = viewport.toAbsoluteCOords(Input.MOUSE);
+    socket.emit('player-action', {
+      mouseX: coords[0],
+      mouseY: coords[1],
+      leftClick: Input.LEFT_CLICK,
+      rightClick: Input.RIGHT_CLICK
+    });
+  }
+}
+
+/**
+ * Draws the game to the canvas.
+ */
+Game.prototype.draw = function() {
+
 }
