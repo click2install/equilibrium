@@ -136,7 +136,7 @@ Lobby.prototype.remove = function(socketId) {
  * sent to the client.
  * @return {Object}
  */
-Lobby.prototype.formStatePacket = function() {
+Lobby.prototype.getStatePacket = function() {
   var rooms = {}
   this.rooms.forEach(function(value, key) {
     rooms[key] = value.users.values();

@@ -22,10 +22,12 @@ var morgan = require('morgan');
 var socketIO = require('socket.io');
 var swig = require('swig');
 
+var GameManager = require('./server/GameManager');
 var Lobby = require('./server/Lobby');
 
 // Initialization.
 var app = express();
+var gameManager = GameManager.create();
 var server = http.Server(app);
 var io = socketIO(server);
 var lobby = Lobby.create();
@@ -68,11 +70,13 @@ io.on('connection', function(socket) {
   });
 
   socket.on('leave-room', function(data) {
-    lobby.remove(socket.id);
+    var user = lobby.remove(socket.id);
+    lobby.addUser(socket.id, socket, user.username);
   });
 
   socket.on('start-game', function(data) {
-    gameManager.newGame(data.room);
+    var room = lobby.removeRoom(data.room);
+    gameManager.newGame(room);
   });
 
   socket.on('disconnect', function() {
@@ -84,7 +88,7 @@ io.on('connection', function(socket) {
 // clients every tick.
 setInterval(function() {
   lobby.update();
-  var lobbyState = lobby.formStatePacket();
+  var lobbyState = lobby.getStatePacket();
   io.emit('lobby-update', lobbyState);
 }, FRAME_RATE);
 

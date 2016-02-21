@@ -14,6 +14,10 @@ GameManager.create = function() {
   return new GameManager();
 };
 
+GameManager.prototype.newGame = function(room) {
+
+};
+
 /**
  * This method takes care of updating the internal state of every active game
  * and sending the state to the appropriate clients.
@@ -24,3 +28,5 @@ GameManager.prototype.update = function() {
     current.sendState();
   });
 };
+
+module.exports = GameManager;
