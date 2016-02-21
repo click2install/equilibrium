@@ -74,7 +74,7 @@ Lobby.prototype.joinRoom = function(roomName, socketId) {
   } else {
     return {
       success: false,
-      message: 'An unknown error occurred, please shoot yourself.'
+      message: 'You must leave your current room.'
     }
   }
   var room = this.rooms.get(roomName);
