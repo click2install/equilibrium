@@ -65,7 +65,6 @@ Game.prototype.sendState = function() {
   for (var id of ids) {
     var currentSocket = this.sockets.get(id);
     var currentPlayer = this.players.get(id);
-    console.log(id, currentPlayer);
     currentSocket.emit('server-update', {
       self: currentPlayer,
       players: this.players.values().filter(function(player) {
