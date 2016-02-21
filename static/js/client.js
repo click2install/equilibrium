@@ -1,5 +1,14 @@
 var socket = io();
-var lobby = Lobby.create(socket, $('#lobby'));
+var lobby = Lobby.create(socket,
+                         $('#lobby-container'),
+                         function() {  // function to start game passed as callback to lobby
+                           startGame();
+                         });
+var game = Game.create(socket,
+                       $('#canvas-container'),
+                       function() {
+                         endGame();
+                       });
 
 $('document').ready(function() {
   lobby.hide();
@@ -23,5 +32,13 @@ $('document').ready(function() {
 
 function init() {
   lobby.init();
+  game.init();
 }
 
+function startGame() {
+  game.start();
+}
+
+function endGame() {
+  
+}
