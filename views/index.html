@@ -1,61 +1,71 @@
 {% extends 'layout.html' %}
 
 {% block head %}
-<script src='/socket.io/socket.io.js'></script>
+  <script src='/socket.io/socket.io.js'></script>
 {% endblock %}
 
 {% block body %}
-<div id='container'>
-  <div id='name-container'>
-    <form id='name-form'>
-      <input id='name-input'
-             placeholder='Enter name here'
-             autocomplete='off' />
-      <button id='name-submit'
-              type='submit'>
-        Join lobby
-      </button>
-    </form>
-  </div>
-  <div id='lobby'><!--
-    <div id='lobby-rooms-container' class='lobby-sidebar'>
-      Rooms
-      <ul id='lobby-rooms'>
-      </ul>
-      <form id='lobby-create-form' class='lobby-form'>
-        <input id='lobby-create-input'
-               placeholder='Enter room name'
+  <div id='container'>
+    <div id='name-container'>
+      <form id='name-form'>
+        <input id='name-input'
+               placeholder='Enter name here'
                autocomplete='off' />
-        <button id='lobby-create-submit'
+        <button id='name-submit'
                 type='submit'>
-          Create
-        </button>
-      </form>
-      <form id='lobby-leave-form' class='lobby-form'>
-        <button id='lobby-leave-submit'
-                type='submit'>
-          Leave
+          Join lobby
         </button>
       </form>
     </div>
-    <div id='lobby-chat-container' class='lobby-middle'>
-      Chat
-      <div id='lobby-chat'>
+    <div id='lobby'>
+      <!--
+      <div id='lobby-rooms-container' class='lobby-sidebar'>
+        Rooms
+        <ul id='lobby-rooms'>
+        </ul>
+        <form id='lobby-create-form' class='lobby-form'>
+          <input id='lobby-create-input'
+                 placeholder='Enter room name'
+                 autocomplete='off' />
+          <button id='lobby-create-submit'
+                  type='submit'>
+            Create
+          </button>
+        </form>
+        <form id='lobby-leave-form' class='lobby-form'>
+          <button id='lobby-leave-submit'
+                  type='submit'>
+            Leave
+          </button>
+        </form>
       </div>
+      <div id='lobby-chat-container' class='lobby-middle'>
+        Chat
+        <div id='lobby-chat'>
+        </div>
+      </div>
+      <div id='lobby-users-container' class='lobby-sidebar'>
+        Users
+        <ul id='lobby-users'>
+        </ul>
+      </div>-->
     </div>
-    <div id='lobby-users-container' class='lobby-sidebar'>
-      Users
-      <ul id='lobby-users'>
-      </ul>
-    </div>-->
+    <div id='canvas'>
+    </div>
   </div>
-  <div id='canvas'>
-  </div>
-</div>
 {% endblock %}
 
 {% block scripts %}
-<script src='/shared/Constants.js'> </script>
-<script src='/static/js/Lobby.js'> </script>
-<script src='/static/js/client.js'> </script>
+  {% if dev_mode %}
+  <script src='/shared/Constants.js'>
+  </script>
+  <script src='/shared/Util.js'>
+  </script>
+  <script src='/static/js/Lobby.js'>
+  </script>
+  <script src='/static/js/client.js'>
+  </script>
+  {% else %}
+  <script src='/static/dist/minified.js'></script>
+  {% endif %}
 {% endblock %}
