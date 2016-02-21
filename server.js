@@ -4,8 +4,9 @@
  */
 
 var DEV_MODE = false;
-var FRAME_RATE = 1000.0 / 60.0;
+var GAME_FRAME_RATE = 1000.0 / 60.0;
 var IP = process.env.IP || 'localhost';
+var LOBBY_UPDATE_RATE = 1000.0 / 2.0;
 var PORT_NUMBER = process.env.PORT || 5000;
 
 process.argv.forEach(function(value, index, array) {
@@ -84,13 +85,16 @@ io.on('connection', function(socket) {
   });
 });
 
-// Server side game loop, runs at 60Hz and sends out update packets to all
-// clients every tick.
+// Server side loop to send update packets for the lobby.
 setInterval(function() {
   lobby.update();
   var lobbyState = lobby.getStatePacket();
   io.emit('lobby-update', lobbyState);
-}, FRAME_RATE);
+}, LOBBY_UPDATE_RATE);
+
+// Server side loop to send update packets for the game.
+setInterval(function() {
+});
 
 // Starts the server.
 server.listen(PORT_NUMBER, function() {
