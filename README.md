@@ -1,4 +1,17 @@
 # Equilibrium
+Equilibrium is a multiplayer game of physics, forces, and weight. To play,
+join a room with another player and start a game. Every object in the game
+world has a certain amount of weight. As a player, you can choose to push
+or pull objects.
+* * *
+  - Pushing an object heavier than you will push you away from the object.
+  - Pushing an object lighter than you will push the object away from you.
+  - Pulling an object heavier than you will pull you towards the object.
+  - Pulling an object lighter than you will pull the object towards you.
+* * *
+If you are able to hit another player with an object at high velocity, you
+will do damage to them. The goal of the game is to be able to kill the other
+player by hitting them while dodging away from their projectiles.
 
 # Technical:
   - Made with NodeJS and Socket.IO
