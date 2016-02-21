@@ -18,25 +18,36 @@
     </form>
   </div>
   <div id='lobby'>
-    <table>
-      <tr>
-        <td id='lobby-rooms-container' class='lobby-sidebar'>
-          Rooms
-          <ul id='lobby-rooms'>
-          </ul>
-        </td>
-        <td id='lobby-chat-container' class='lobby-middle'>
-          Chat
-          <div id='lobby-chat'>
-          </div>
-        </td>
-        <td id='lobby-users-container' class='lobby-sidebar'>
-          Users
-          <ul id='lobby-users'>
-          </ul>
-        </td>
-      </tr>
-    </table>
+    <div id='lobby-rooms-container' class='lobby-sidebar'>
+      Rooms
+      <ul id='lobby-rooms'>
+      </ul>
+      <form id='lobby-create-form' class='lobby-form'>
+        <input id='lobby-create-input'
+               placeholder='Enter room name'
+               autocomplete='off' />
+        <button id='lobby-create-submit'
+                type='submit'>
+          Create
+        </button>
+      </form>
+      <form id='lobby-leave-form' class='lobby-form'>
+        <button id='lobby-leave-submit'
+                type='submit'>
+          Leave
+        </button>
+      </form>
+    </div>
+    <div id='lobby-chat-container' class='lobby-middle'>
+      Chat
+      <div id='lobby-chat'>
+      </div>
+    </div>
+    <div id='lobby-users-container' class='lobby-sidebar'>
+      Users
+      <ul id='lobby-users'>
+      </ul>
+    </div>
   </div>
   <div id='canvas'>
   </div>

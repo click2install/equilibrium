@@ -7,9 +7,8 @@ $('document').ready(function() {
   $('#lobby').hide();
   $('#name-input').focus();
 
-  function send_name() {
+  $('#name-form').submit(function() {
     var name = $('#name-input').val();
-    console.log(name);
     
     socket.emit('new-player', {
       name: name
@@ -17,26 +16,34 @@ $('document').ready(function() {
 
     $('#name-container').hide();
     $('#lobby').show();
+    $('#lobby-leave-form').hide();
 
     return false;
-  }
-  
-  $('#name-form').submit(send_name);
-  $('#name-submit').click(send_name);
+  });
 
   socket.on('lobby-update', function(data) {
-    x = data;
     $('#lobby-rooms').empty();
     $('#lobby-users').empty();
 
     var rooms = []
     var freeUsers = []
 
-    $.each(data.rooms, function(name, users) {
+    $.each(data.rooms, function(room, users) {
       rooms.push(
         $('<li>')
-          .append($('<div>').text(name))
-          .append($('<div>').text(users.length + "/" + Constants.ROOM_CAPACITY)));
+          .append(
+            $('<span>')
+              .attr('class', 'lobby-room-name')
+              .text(room)
+              .click(function() {
+                socket.emit('join-room', {
+                  room: room
+                });
+              }))
+          .append(
+            $('<span>')
+              .attr('class', 'lobby-room-info')
+              .text(users.length + "/" + Constants.ROOM_CAPACITY)));
     });
 
     $.each(data.freeUsers, function(i, freeUser) {
@@ -45,5 +52,27 @@ $('document').ready(function() {
 
     $('#lobby-rooms').append.apply($('#lobby-rooms'), rooms);
     $('#lobby-users').append.apply($('#lobby-users'), freeUsers);
+  });
+
+  $('#lobby-create-form').submit(function() {
+    var room = $('#lobby-create-input').val();
+
+    socket.emit('create-room', {
+      room: room
+    });
+
+    $('#lobby-create-form').hide();
+    $('#lobby-leave-form').show();
+    
+    return false;
+  });
+
+  $('#lobby-leave-form').submit(function() {
+    socket.emit('leave-room', {});
+
+    $('#lobby-leave-form').hide();
+    $('#lobby-create-form').show();
+
+    return false;
   });
 });
