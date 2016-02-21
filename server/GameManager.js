@@ -30,15 +30,28 @@ GameManager.create = function(io) {
  *   a new active Game for.
  */
 GameManager.prototype.newGame = function(room) {
+  // Emit the lobby-update packet to all users that have started a game.
+  for (var socket of room.sockets.values()) {
+    socket.emit('lobby-update', {
+      gameStart: true
+    });
+  }
   this.games.push(Game.create(room.sockets, room.users));
 };
 
 /**
  * This method takes care of updating the internal state of every active game
  * and sending the state to the appropriate clients.
+ * @param {function()} endGameCallback This is a callback that allows players
+ *   in games that have ended to be added back to the lobby.
  */
-GameManager.prototype.update = function() {
-  for (var game of this.games) {
+GameManager.prototype.update = function(endGameCallback) {
+  for (var i = 0; i < this.games.length; ++i) {
+    if (game.hasEnded()) {
+      var game = this.games.splice(i, 1);
+      i--;
+      endGameCallback(game);
+    }
     game.update();
     game.sendState();
   }

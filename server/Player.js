@@ -5,8 +5,9 @@
 
 var Entity = require('Entity');
 
-function Player(socket, x, y) {
+function Player(socket, name, x, y) {
   this.socket = socket;
+  this.name = name;
 
   this.x = x;
   this.y = y;
@@ -14,8 +15,15 @@ function Player(socket, x, y) {
 require('../shared/inheritable');
 Player.inheritsFrom(Entity);
 
-Player.create = function(socket, x, y) {
-  return new Player(socket)
+Player.create = function(socket, name, x, y) {
+  return new Player(socket, name, x, y)
+};
+
+Player.prototype.updateOnInput = function() {
+
+};
+
+Player.prototype.update = function() {
 };
 
 module.exports = Player;
