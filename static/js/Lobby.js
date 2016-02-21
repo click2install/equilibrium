@@ -273,6 +273,7 @@ Lobby.prototype.sendMessage = function() {
 }
 
 Lobby.prototype.receiveMessage = function(data) {
-  $('#lobby-chat-history').append(
-    document.createTextNode('[' + data.name + '] ' + data.message + '\n'));
+  $('#lobby-chat-history')
+    .append(document.createTextNode('[' + data.name + '] ' + data.message + '\n'))
+    .scrollTop($('#lobby-chat-history')[0].scrollHeight);  
 }
