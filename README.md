@@ -8,6 +8,7 @@ or pull objects.
   - Pushing an object lighter than you will push the object away from you.
   - Pulling an object heavier than you will pull you towards the object.
   - Pulling an object lighter than you will pull the object towards you.
+
 * * *
 If you are able to hit another player with an object at high velocity, you
 will do damage to them. The goal of the game is to be able to kill the other
@@ -25,7 +26,7 @@ player by hitting them while dodging away from their projectiles.
 
 # Setting Up:
   This project requires node version 0.12 or greater.
-  npm, bower and gulp should be installed globally on your system.
+  npm, bower, and gulp should be installed globally on your system.
   ```
   npm install
   bower install
