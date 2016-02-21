@@ -29,26 +29,29 @@ Lobby.prototype.generate = function() {
     lobbyEl
       .append(
         $('<div>')
-          .attr('id', 'lobby-rooms-container')
-          .attr('class', 'lobby-sidebar')
+          .prop('id', 'lobby-rooms-container')
+          .prop('class', 'lobby-sidebar')
           .append(
             $('<div>')
-              .attr('id', 'lobby-rooms-title')
+              .prop('id', 'lobby-rooms-title')
+              .prop('class', 'lobby-title')
               .text('Rooms'))
           .append(
-            $('<ul>').attr('id', 'lobby-rooms'))
+            $('<ul>')
+              .prop('id', 'lobby-rooms')
+              .prop('class', 'lobby-content'))
           .append(
             $('<form>')
-              .attr('id', 'lobby-create-form')
-              .attr('class', 'lobby-form')
+              .prop('id', 'lobby-create-form')
+              .prop('class', 'lobby-form')
               .append(
                 $('<input>')
-                  .attr('id', 'lobby-create-input')
-                  .attr('placeholder', 'Enter room name'))
+                  .prop('id', 'lobby-create-input')
+                  .prop('placeholder', 'Enter room name'))
               .append(
                 $('<button>')
-                  .attr('id', 'lobby-create-submit')
-                  .attr('type', 'submit')
+                  .prop('id', 'lobby-create-submit')
+                  .prop('type', 'submit')
                   .text('Create'))
               .submit(function(event) {
                 event.preventDefault();
@@ -56,22 +59,25 @@ Lobby.prototype.generate = function() {
               })))
       .append(
         $('<div>')
-          .attr('id', 'lobby-current-room-container')
-          .attr('class', 'lobby-sidebar')
+          .prop('id', 'lobby-current-room-container')
+          .prop('class', 'lobby-sidebar')
           .append(
             $('<div>')
-              .attr('id', 'lobby-current-room-title')
+              .prop('id', 'lobby-current-room-title')
+              .prop('class', 'lobby-title')
               .text('Room'))
           .append(
-            $('<ul>').attr('id', 'lobby-current-room-users'))
+            $('<ul>')
+              .prop('id', 'lobby-current-room-users')
+              .prop('class', 'lobby-content'))
           .append(
             $('<form>')
-              .attr('id', 'lobby-ready-form')
-              .attr('class', 'lobby-form')
+              .prop('id', 'lobby-ready-form')
+              .prop('class', 'lobby-form')
               .append(
                 $('<button>')
-                  .attr('id', 'lobby-ready-submit')
-                  .attr('type', 'submit')
+                  .prop('id', 'lobby-ready-submit')
+                  .prop('type', 'submit')
                   .text(ready ? 'Unready' : 'Ready'))
               .submit(function(event) {
                 event.preventDefault();
@@ -79,12 +85,12 @@ Lobby.prototype.generate = function() {
               }))
           .append(
             $('<form>')
-              .attr('id', 'lobby-leave-form')
-              .attr('class', 'lobby-form')
+              .prop('id', 'lobby-leave-form')
+              .prop('class', 'lobby-form')
               .append(
                 $('<button>')
-                  .attr('id', 'lobby-leave-submit')
-                  .attr('type', 'submit')
+                  .prop('id', 'lobby-leave-submit')
+                  .prop('type', 'submit')
                   .text('Leave'))
               .submit(function(event) {
                 event.preventDefault();
@@ -92,24 +98,48 @@ Lobby.prototype.generate = function() {
               })))
       .append(
         $('<div>')
-          .attr('id', 'lobby-chat-container')
-          .attr('class', 'lobby-middle')
+          .prop('id', 'lobby-chat-container')
+          .prop('class', 'lobby-middle')
           .append(
             $('<div>')
-              .attr('id', 'lobby-chat-title')
+              .prop('id', 'lobby-chat-title')
+              .prop('class', 'lobby-title')
               .text('Chat'))
           .append(
-            $('<div>').attr('id', 'lobby-chat')))
+            $('<textarea>')
+              .prop('id', 'lobby-chat-history')
+              .prop('class', 'lobby-content')
+              .prop('readonly', true))
+          .append(
+            $('<form>')
+              .prop('id', 'lobby-chat-form')
+              .prop('class', 'lobby-form')
+              .append(
+                $('<input>')
+                  .prop('id', 'lobby-chat-input')
+                  .prop('placeholder', 'Enter message here'))
+              .append(
+                $('<button>')
+                  .prop('id', 'lobby-chat-submit')
+                  .prop('type', 'submit')
+                  .text('Send'))
+              .submit(function(event) {
+                event.preventDefault();
+                sendMessage();
+              })))
       .append(
         $('<div>')
-          .attr('id', 'lobby-users-container')
-          .attr('class', 'lobby-sidebar')
+          .prop('id', 'lobby-users-container')
+          .prop('class', 'lobby-sidebar')
           .append(
             $('<div>')
-              .attr('id', 'lobby-users-title')
+              .prop('id', 'lobby-users-title')
+              .prop('class', 'lobby-title')
               .text('Users'))
           .append(
-            $('<ul>').attr('id', 'lobby-users')));
+            $('<ul>')
+              .prop('id', 'lobby-users')
+              .prop('class', 'lobby-content')));
   }
 }
 
@@ -132,13 +162,13 @@ Lobby.prototype.update = function(data) {
           $('<li>')
             .append(
               $('<span>')
-                .attr('class', 'lobby-room-name')
+                .prop('class', 'lobby-room-name')
                 .text(room))
             .append(
               $('<span>')
-                .attr('class', 'lobby-room-info')
+                .prop('class', 'lobby-room-info')
                 .text(users.length + "/" + Constants.ROOM_CAPACITY))
-            .click(function() {
+            .click(function(event) {
               event.preventDefault();
               joinRoom(room);
             }));
@@ -154,11 +184,11 @@ Lobby.prototype.update = function(data) {
           $('<li>')
             .append(
               $('<span>')
-                .attr('class', 'lobby-current-room-user-name')
+                .prop('class', 'lobby-current-room-user-name')
                 .text(user.user))
             .append(
               $('<span>')
-                .attr('class', 'lobby-current-room-user-ready')
+                .prop('class', 'lobby-current-room-user-ready')
                 .text(user.ready ? 'Ready' : 'Not ready')));
       });
 
@@ -231,3 +261,8 @@ Lobby.prototype.toggleReady = function() {
   });
 }
              
+Lobby.prototype.sendMessage = function() {
+  socket.emit('chat-client-to-server', {
+    message: $('lobby-chat-input').val()
+  });
+}
