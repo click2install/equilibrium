@@ -49,11 +49,18 @@ Game.prototype.start = function() {
   this.containerEl.show();
   with (this) {
     socket.on('game-update', function(data) {
-      self = data.self;
-      players = data.players;
-      entities = data.entities;
+      updateVars(data);
     });
   }
+}
+
+/**
+ * Updates game instance variables.
+ */
+Game.prototype.updateVars = function(data) {
+  this.self = data.self;
+  this.players = data.players;
+  this.entities = data.entities;
 }
 
 /**
