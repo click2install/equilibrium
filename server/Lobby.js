@@ -1,5 +1,8 @@
 /**
  * This is a class that manages the state of the pre-game lobby.
+ * Note to future self: This class is extremely convoluted and you will
+ * likely have no fucking idea why it was done this way. Bear in mind this
+ * was done in 48 hours for the Koding hackathon.
  * @author Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
@@ -8,12 +11,18 @@ var Hashmap = require('hashmap');
 function Lobby() {
   /**
    * freeSockets and freeUsers represents the sockets and the users that are
-   * not connected to a room.
+   * not connected to a room. The key for these two hashmaps are the socket
+   * ID of the user/socket.
    */
   this.freeSockets = new Hashmap();
   this.freeUsers = new Hashmap();
   /**
-   * A Hashmap of rooms.
+   * A Hashmap of rooms, keys are the names of the rooms and all values are of
+   * the format:
+   * {
+   *   sockets: (hashmap of Sockets keyed by socket ID),
+   *   users: (hashmap of usernames keyed by socket ID),
+   * }
    */
   this.rooms = new Hashmap();
 }
@@ -161,14 +170,17 @@ Lobby.prototype.isRoomReady = function(roomName) {
 };
 
 /**
- * This method updates the lobby and removes empty rooms.
+ * This method updates the lobby and removes empty rooms. If there is a room
+ * that is ready to start, then it will remove the room and start it as a game.
+ * @param {function()} startGameCallback This is a callback that starts a
+ *   game given the game room full of players.
  */
-Lobby.prototype.update = function() {
+Lobby.prototype.update = function(startGameCallback) {
   for (var roomName of this.rooms.keys()) {
     if (this.rooms.get(roomName).users.values().length == 0) {
       this.removeRoom(roomName);
     } else if (this.isRoomReady(roomName)) {
-      console.log(roomName);
+      startGameCallback(this.removeRoom(roomName));
     }
   }
 };

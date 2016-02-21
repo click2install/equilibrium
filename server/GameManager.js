@@ -6,16 +6,25 @@
 
 var Game = require('./Game');
 
-function GameManager() {
+function GameManager(io) {
+  this.io = io;
+
   this.games = [];
 }
 
-GameManager.create = function() {
-  return new GameManager();
+GameManager.create = function(io) {
+  return new GameManager(io);
 };
 
+/**
+ * Given a room removed from the Lobby class (schema detailed in Lobby.js),
+ * this method will create a socket channel for the game and begin sending
+ * update packets to the game.
+ * @param {Object} room The game room from the lobby that we should create
+ *   a new active Game for.
+ */
 GameManager.prototype.newGame = function(room) {
-
+  // TODO
 };
 
 /**

@@ -28,9 +28,10 @@ var Lobby = require('./server/Lobby');
 
 // Initialization.
 var app = express();
-var gameManager = GameManager.create();
 var server = http.Server(app);
 var io = socketIO(server);
+
+var gameManager = GameManager.create(io);
 var lobby = Lobby.create();
 
 app.engine('html', swig.renderFile);
@@ -95,7 +96,9 @@ io.on('connection', function(socket) {
 
 // Server side loop to send update packets for the lobby.
 setInterval(function() {
-  lobby.update();
+  lobby.update(function(room) {
+    gameManager.newGame(room);
+  });
   var lobbyState = lobby.getStatePacket();
   io.emit('lobby-update', lobbyState);
 }, LOBBY_UPDATE_RATE);
