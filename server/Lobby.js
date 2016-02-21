@@ -218,8 +218,8 @@ Lobby.prototype.remove = function(socketId) {
 };
 
 /**
- * This method returns a JSON object representation of the lobby that gets
- * sent to the client.
+ * This method serializes and returns a JSON object representation of the
+ * lobby so that it can be sent to the clients.
  * @return {Object}
  */
 Lobby.prototype.getStatePacket = function() {

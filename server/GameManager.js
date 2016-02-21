@@ -6,12 +6,18 @@
 
 var Game = require('./Game');
 
+var Util = require('../shared/Util');
+
 function GameManager(io) {
   this.io = io;
 
   this.games = [];
 }
 
+/**
+ * Factory method to create a GameManager.
+ * @return {GameManager}
+ */
 GameManager.create = function(io) {
   return new GameManager(io);
 };
@@ -24,7 +30,7 @@ GameManager.create = function(io) {
  *   a new active Game for.
  */
 GameManager.prototype.newGame = function(room) {
-  // TODO
+  this.games.push(Game.create(room.sockets, room.users));
 };
 
 /**
@@ -32,10 +38,10 @@ GameManager.prototype.newGame = function(room) {
  * and sending the state to the appropriate clients.
  */
 GameManager.prototype.update = function() {
-  this.games.forEach(function(current, index, array) {
-    current.update();
-    current.sendState();
-  });
+  for (var game of this.games) {
+    game.update();
+    game.sendState();
+  }
 };
 
 module.exports = GameManager;

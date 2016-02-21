@@ -96,15 +96,23 @@ io.on('connection', function(socket) {
 
 // Server side loop to send update packets for the lobby.
 setInterval(function() {
+  // When we update the lobby, it checks if a game is ready to be started, so
+  // we pass it a callback that starts a game when it finds a room in the
+  // lobby that is ready to start.
   lobby.update(function(room) {
     gameManager.newGame(room);
   });
+
+  // After the update, we serialize the state of the lobby so that it can be
+  // sent to the client through the WebSocket connection.
   var lobbyState = lobby.getStatePacket();
   io.emit('lobby-update', lobbyState);
 }, LOBBY_UPDATE_RATE);
 
 // Server side loop to send update packets for the game.
 setInterval(function() {
+  gameManager.update(function() {
+  });
 });
 
 // Starts the server.
