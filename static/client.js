@@ -33,16 +33,23 @@ $('document').ready(function() {
           .append(
             $('<span>')
               .attr('class', 'lobby-room-name')
-              .text(room)
-              .click(function() {
-                socket.emit('join-room', {
-                  room: room
-                });
-              }))
+              .text(room))
           .append(
             $('<span>')
               .attr('class', 'lobby-room-info')
-              .text(users.length + "/" + Constants.ROOM_CAPACITY)));
+              .text(users.length + "/" + Constants.ROOM_CAPACITY))
+          .click(function() {
+            socket.emit('join-room', {
+              room: room
+            }, function(status) {
+              if (status.success) {
+                $('#lobby-create-room').hide();
+                $('#lobby-leave-room').show();
+              } else {
+                window.alert(status.message);
+              }
+            });
+          }));
     });
 
     $.each(data.freeUsers, function(i, freeUser) {
@@ -60,6 +67,13 @@ $('document').ready(function() {
 
     socket.emit('create-room', {
       room: room
+    }, function(status) {
+      if (status.success) {
+        $('#lobby-create-room').hide();
+        $('#lobby-leave-room').show();
+      } else {
+        window.alert(status.message);
+      }
     });
 
     $('#lobby-create-form').hide();
