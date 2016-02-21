@@ -55,6 +55,10 @@ app.get('/', function(request, response) {
 
 // Websocket handling
 io.on('connection', function(socket) {
+  socket.on('chat-client-to-server', function(data) {
+    io.sockets.emit('chat-server-to-client', data);
+  });
+
   socket.on('new-player', function(data) {
     lobby.addUser(socket.id, socket, data.name);
   });
