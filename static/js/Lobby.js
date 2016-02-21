@@ -43,7 +43,8 @@ Lobby.prototype.generate = function() {
                   .attr('id', idPrefix + '-create-submit')
                   .attr('type', 'submit')
                   .text('Create'))
-              .submit(function() {
+              .submit(function(event) {
+                event.preventDefault();
                 createRoom();
               }))
           .append(
@@ -55,9 +56,10 @@ Lobby.prototype.generate = function() {
                   .attr('id', idPrefix + '-leave-submit')
                   .attr('type', 'submit')
                   .text('Leave'))
-              .submit(function() {
+              .submit(function(event) {
+                event.preventDefault();
                 leaveRoom();
-              })))              
+              })))
       .append(
         $('<div>')
           .attr('id', idPrefix + '-chat-container')
@@ -109,7 +111,7 @@ Lobby.prototype.update = function(data) {
     });
 
     $('#' + idPrefix + '-rooms').empty();
-    $('#' + idPrefix + '-users').empty();    
+    $('#' + idPrefix + '-users').empty();
     $('#' + idPrefix + '-rooms').append.apply($('#' + idPrefix + '-rooms'), rooms);
     $('#' + idPrefix + '-users').append.apply($('#' + idPrefix + '-users'), freeUsers);
   }
