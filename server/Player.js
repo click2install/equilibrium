@@ -25,7 +25,7 @@ require('../shared/inheritable');
 Player.inheritsFrom(Entity);
 
 Player.MAX_HEALTH = 100;
-Player.DEFAULT_WEIGHT = 17;
+Player.DEFAULT_WEIGHT = 20;
 Player.FORCE_ACCELERATION = 0.0005;
 
 Player.create = function(name, x, y) {
@@ -59,7 +59,6 @@ Player.prototype.updateOnInput = function(mouseX, mouseY,
  */
 Player.prototype.update = function(players, entities) {
   this.parent.update.call(this);
-  // TODO: Add acceleration and velocity modifiers.
 
   if (this.isPushing) {
     for (var entity of entities) {

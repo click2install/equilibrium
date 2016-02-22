@@ -57,12 +57,6 @@ Entity.prototype.isCollidedWith = function(other) {
 Entity.prototype.decelerate = function() {
   this.ax = -Util.getSign(this.vx) * Constants.ENTITY_DECELERATION;
   this.ay = -Util.getSign(this.vy) * Constants.ENTITY_DECELERATION;
-  if (Math.abs(this.vx) <= Math.abs(this.ax)) {
-    this.vx = 0;
-  }
-  if (Math.abs(this.vy) <= Math.abs(this.ay)) {
-    this.vy = 0;
-  }
 };
 
 /**
@@ -77,7 +71,13 @@ Entity.prototype.update = function() {
     this.updateTimeDifference = currentTime - this.lastUpdateTime;
   }
   this.vx += this.ax * this.updateTimeDifference;
+  if (Math.abs(this.vx) <= Math.abs(this.ax)) {
+    this.vx = 0;
+  }
   this.vy += this.ay * this.updateTimeDifference;
+  if (Math.abs(this.vy) <= Math.abs(this.ay)) {
+    this.vy = 0;
+  }
   this.x = Util.bound(this.x + this.vx * this.updateTimeDifference,
                       Constants.WORLD_MIN, Constants.WORLD_MAX);
   this.y = Util.bound(this.y + this.vy * this.updateTimeDifference,
