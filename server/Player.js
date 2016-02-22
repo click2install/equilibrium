@@ -68,8 +68,8 @@ Player.prototype.update = function(players, entities) {
           this.ax = Math.cos(angle) * -Player.FORCE_ACCELERATION;
           this.ay = Math.sin(angle) * -Player.FORCE_ACCELERATION;
         } else {
-          entity.ax = Math.cos(angle) * Player.FORCE_ACCELERATION;
-          entity.ay = Math.sin(angle) * Player.FORCE_ACCELERATION;
+          entity.ax += Math.cos(angle) * Player.FORCE_ACCELERATION;
+          entity.ay += Math.sin(angle) * Player.FORCE_ACCELERATION;
         }
         break;
       } else {
@@ -84,8 +84,8 @@ Player.prototype.update = function(players, entities) {
           this.ax = Math.cos(angle) * Player.FORCE_ACCELERATION;
           this.ay = Math.sin(angle) * Player.FORCE_ACCELERATION;
         } else {
-          entity.ax = Math.cos(angle) * -Player.FORCE_ACCELERATION;
-          entity.ay = Math.sin(angle) * -Player.FORCE_ACCELERATION;
+          entity.ax += Math.cos(angle) * -Player.FORCE_ACCELERATION;
+          entity.ay += Math.sin(angle) * -Player.FORCE_ACCELERATION;
         }
         break;
       } else {

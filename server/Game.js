@@ -54,7 +54,8 @@ Game.prototype.init = function() {
   for (var i = 0; i < Game.ANCHOR_COUNT; ++i) {
     var anchorX = Util.randRange(Constants.WORLD_MIN, Constants.WORLD_MAX);
     var anchorY = Util.randRange(Constants.WORLD_MIN, Constants.WORLD_MAX);
-    this.entities.push(Anchor.create(anchorX, anchorY));
+    var weight = Util.randRangeInt(Anchor.MIN_WEIGHT, Anchor.MAX_WEIGHT);
+    this.entities.push(Anchor.create(anchorX, anchorY, weight));
   }
 };
 
@@ -63,17 +64,16 @@ Game.prototype.init = function() {
  */
 Game.prototype.update = function() {
   var players = this.players.values();
+  for (var entity of this.entities) {
+    entity.update();
+    entity.decelerate();
+  }
   for (var player of players) {
+    // Player acceleration actions
     var otherPlayers = players.filter(function(otherPlayer) {
       return player != otherPlayer;
     });
     player.update(otherPlayers, this.entities);
-  }
-  for (var entity of this.entities) {
-    var otherEntities = this.entities.filter(function(otherEntity) {
-      return entity != otherEntity;
-    });
-    entity.update();
   }
 };
 

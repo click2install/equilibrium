@@ -28,8 +28,7 @@ Anchor.MAX_WEIGHT = 25;
  * @param {number} y The starting y coordinate of the Anchor in absolute
  *   world coordinates.
  */
-Anchor.create = function(x, y) {
-  var weight = Util.randRangeInt(Anchor.MIN_WEIGHT, Anchor.MAX_WEIGHT);
+Anchor.create = function(x, y, weight) {
   return new Anchor(x, y, weight);
 };
 
