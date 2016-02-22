@@ -18,7 +18,7 @@ function Game(socket, containerEl, canvasEl, drawing, viewport, endGame) {
   this.entities = [];
 }
 
-var client, server;
+var client, server, canvasX;
 
 /**
  * Factory method for the Game class.
@@ -28,12 +28,14 @@ var client, server;
  * @return {Game}
  */
 Game.create = function(socket, containerEl, endGame) {
-  var canvasEl =
-      $('<canvas>')
-      .prop('id', 'canvas')
-      .on('contextmenu', function(e) {
-        e.stopPropagation();
-      });
+  var canvasEl = $('<canvas>');
+  canvasEl
+    .prop('id', 'canvas')
+    .prop('width', Constants.CANVAS_WIDTH)
+    .prop('height', Constants.CANVAS_HEIGHT)
+    .on('contextmenu', function(e) {
+      e.stopPropagation();
+    });
   var drawing = Drawing.create(canvasEl[0].getContext('2d'));
   var viewport = Viewport.create();
   return new Game(socket, containerEl, canvasEl, drawing, viewport, endGame);
@@ -100,7 +102,7 @@ Game.prototype.update = function() {
  * Draws the game to the canvas.
  */
 Game.prototype.draw = function() {
-  this.drawing.clear();
+  //this.drawing.clear();
   
   for (var player of this.players) {
     var coords = this.viewport.toCanvasCoords([player.x, player.y]);
@@ -111,7 +113,9 @@ Game.prototype.draw = function() {
     var coords = this.viewport.toCanvasCoords([entity.x, entity.y]);
     this.drawing.drawEntity(coords, entity.weight);
   }
-  
-  var coords = this.viewport.toCanvasCoords([self.x, self.y]);
-  this.drawing.drawSelf(coords, self.weight);
+
+  if (this.self) {
+    var coords = this.viewport.toCanvasCoords([this.self.x, this.self.y]);
+    this.drawing.drawSelf(coords, this.self.weight);
+  }
 }
