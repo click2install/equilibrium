@@ -37,7 +37,6 @@ Player.create = function(name, x, y) {
  */
 Player.prototype.updateOnInput = function(mouseX, mouseY,
                                           leftClick, rightClick) {
-  console.log(this);
   if (leftClick) {
     this.vx = -2;
   } else {

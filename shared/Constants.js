@@ -15,6 +15,9 @@ Constants.ROOM_CAPACITY = 4;
 Constants.CANVAS_WIDTH = 800;
 Constants.CANVAS_HEIGHT = 600;
 
+Constants.WORLD_MIN = 0;
+Constants.WORLD_MAX = 1000;
+
 try {
   module.exports = Constants;
 } catch (err) {}

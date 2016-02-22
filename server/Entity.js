@@ -4,6 +4,7 @@
  * @author Alvin Lin (alvin.lin.dev@gmail.com)
  */
 
+var Constants = require('../shared/Constants');
 var Util = require('../shared/Util');
 
 /**
@@ -61,10 +62,12 @@ Entity.prototype.update = function() {
   } else {
     this.updateTimeDifference = currentTime - this.lastUpdateTime;
   }
-  this.x += this.vx * this.updateTimeDifference;
-  this.y += this.vy * this.updateTimeDifference;
   this.vx += this.ax * this.updateTimeDifference;
   this.vy += this.ay * this.updateTimeDifference;
+  this.x = Util.bound(this.x + this.vx * this.updateTimeDifference,
+                      Constants.WORLD_MIN, Constants.WORLD_MAX);
+  this.y = Util.bound(this.y + this.vy * this.updateTimeDifference,
+                      Constants.WORLD_MIN, Constants.WORLD_MAX);
   this.lastUpdateTime = currentTime;
 };
 

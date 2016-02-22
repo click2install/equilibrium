@@ -6,7 +6,11 @@
 // Dependencies
 var Hashmap = require('hashmap');
 
+var Anchor = require('./Anchor');
 var Player = require('./Player');
+
+var Constants = require('../shared/Constants');
+var Util = require('../shared/Util');
 
 function Game(sockets, players) {
   this.sockets = sockets;
@@ -14,6 +18,8 @@ function Game(sockets, players) {
 
   this.entities = [];
 }
+
+Game.ANCHOR_COUNT = 50;
 
 /**
  * Factory method for a game. We can assume that sockets and users are both
@@ -23,7 +29,9 @@ Game.create = function(sockets, users) {
   var keys = sockets.keys();
   var players = new Hashmap();
   for (var key of keys) {
-    players.set(key, Player.create(users.get(key).user, 0, 0));
+    var playerX = Util.randRange(Constants.WORLD_MIN, Constants.WORLD_MAX);
+    var playerY = Util.randRange(Constants.WORLD_MIN, Constants.WORLD_MAX);
+    players.set(key, Player.create(users.get(key).user, playerX, playerY));
   }
   var game = new Game(sockets, players);
   game.init();
@@ -42,6 +50,12 @@ Game.prototype.init = function() {
                                           data.leftClick, data.rightClick);
     });
   });
+
+  for (var i = 0; i < Game.ANCHOR_COUNT; ++i) {
+    var anchorX = Util.randRange(Constants.WORLD_MIN, Constants.WORLD_MAX);
+    var anchorY = Util.randRange(Constants.WORLD_MIN, Constants.WORLD_MAX);
+    this.entities.push(Anchor.create(anchorX, anchorY));
+  }
 };
 
 /**

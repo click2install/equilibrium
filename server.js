@@ -114,7 +114,7 @@ setInterval(function() {
 setInterval(function() {
   gameManager.update(function() {
   });
-});
+}, GAME_FRAME_RATE);
 
 // Starts the server.
 server.listen(PORT_NUMBER, function() {
