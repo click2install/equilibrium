@@ -18,6 +18,8 @@ Constants.CANVAS_HEIGHT = 600;
 Constants.WORLD_MIN = 0;
 Constants.WORLD_MAX = 1000;
 
+Constants.ENTITY_DECELERATION = 0.00025;
+
 try {
   module.exports = Constants;
 } catch (err) {}

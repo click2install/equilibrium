@@ -12,13 +12,14 @@ function Anchor(x, y, weight) {
   this.x = x;
   this.y = y;
 
+  this.hitboxSize = weight;
   this.weight = weight;
 }
 require('../shared/inheritable');
 Anchor.inheritsFrom(Entity);
 
-Anchor.MIN_WEIGHT = 1;
-Anchor.MAX_WEIGHT = 15;
+Anchor.MIN_WEIGHT = 12;
+Anchor.MAX_WEIGHT = 25;
 
 /**
  * Factory method for an Anchor.
@@ -30,6 +31,11 @@ Anchor.MAX_WEIGHT = 15;
 Anchor.create = function(x, y) {
   var weight = Util.randRangeInt(Anchor.MIN_WEIGHT, Anchor.MAX_WEIGHT);
   return new Anchor(x, y, weight);
+};
+
+Anchor.update = function() {
+  this.parent.update.call(this);
+  this.decelerate();
 };
 
 module.exports = Anchor;

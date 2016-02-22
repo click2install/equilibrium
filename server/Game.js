@@ -73,7 +73,7 @@ Game.prototype.update = function() {
     var otherEntities = this.entities.filter(function(otherEntity) {
       return entity != otherEntity;
     });
-    entity.update(players, otherEntities);
+    entity.update();
   }
 };
 

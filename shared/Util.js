@@ -17,21 +17,16 @@ function Util() {
 };
 
 /**
- * Generates and returns a UID.
- * @param {?number=} length An optional length parameter for the UID to
- *   to generate. If the length is not provided, this function will return a
- *   UID of length 32.
+ * This method returns the sign of a number.
+ * @param {number} x The number to return the sign of.
  */
-Util.generateUID = function(length) {
-  if (!length) {
-    length = 32;
+Util.getSign = function(x) {
+  if (x > 0) {
+    return 1;
+  } else if (x < 0) {
+    return -1;
   }
-  var choice = "abcdefghijklmnopqrstuvwxyz1234567890";
-  var uid = "";
-  for (var i = 0; i < length; ++i) {
-    uid += choice.charAt(Math.floor(Math.random() * choice.length));
-  }
-  return uid;
+  return x;
 };
 
 /**

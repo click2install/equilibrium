@@ -52,8 +52,22 @@ Entity.prototype.isCollidedWith = function(other) {
 };
 
 /**
- * This method updates the entity's position based on its velocity according to
- * the amount of time the passed between this update and the last update.
+ * This method acts as a friction factor and decelerates the Entity.
+ */
+Entity.prototype.decelerate = function() {
+  this.ax = -Util.getSign(this.vx) * Constants.ENTITY_DECELERATION;
+  this.ay = -Util.getSign(this.vy) * Constants.ENTITY_DECELERATION;
+  if (Math.abs(this.vx) <= Math.abs(this.ax)) {
+    this.vx = 0;
+  }
+  if (Math.abs(this.vy) <= Math.abs(this.ay)) {
+    this.vy = 0;
+  }
+};
+
+/**
+ * This method updates the entity's position based on its velocity according
+ * to the amount of time the passed between this update and the last update.
  */
 Entity.prototype.update = function() {
   var currentTime = (new Date()).getTime();

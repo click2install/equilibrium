@@ -5,20 +5,28 @@
 
 var Entity = require('./Entity');
 
+var Util = require('../shared/Util');
+
 function Player(name, x, y) {
   this.name = name;
 
-  this.hp = Player.MAX_HEALTH;
-  this.weight = Player.DEFAULT_WEIGHT;
-
   this.x = x;
   this.y = y;
+
+  this.hp = Player.MAX_HEALTH;
+  this.hitboxSize = this.weight;
+  this.weight = Player.DEFAULT_WEIGHT;
+
+  this.isPushing = false;
+  this.isPulling = false;
+  this.lastMouseCoords = {};
 }
 require('../shared/inheritable');
 Player.inheritsFrom(Entity);
 
 Player.MAX_HEALTH = 100;
-Player.DEFAULT_WEIGHT = 10;
+Player.DEFAULT_WEIGHT = 17;
+Player.FORCE_ACCELERATION = 0.0005;
 
 Player.create = function(name, x, y) {
   return new Player(name, x, y);
@@ -37,17 +45,12 @@ Player.create = function(name, x, y) {
  */
 Player.prototype.updateOnInput = function(mouseX, mouseY,
                                           leftClick, rightClick) {
-  if (leftClick) {
-    this.vx = -2;
-  } else {
-    this.vx = 0;
-  }
-  if (rightClick) {
-    this.vy = 3;
-  } else {
-    this.vy = 0;
-  }
-  // TODO: Add acceleration and velocity modifiers.
+  this.isPushing = leftClick;
+  this.isPulling = rightClick;
+  this.lastMouseCoords = {
+    x: mouseX,
+    y: mouseY
+  };
 };
 
 /**
@@ -56,6 +59,55 @@ Player.prototype.updateOnInput = function(mouseX, mouseY,
  */
 Player.prototype.update = function(players, entities) {
   this.parent.update.call(this);
+  // TODO: Add acceleration and velocity modifiers.
+
+  if (this.isPushing) {
+    for (var entity of entities) {
+      if (entity.isOnPoint(this.lastMouseCoords.x, this.lastMouseCoords.y)) {
+        var angle = Math.atan2(entity.y - this.y, entity.x - this.x);
+        if (this.weight <= entity.weight) {
+          this.ax = Math.cos(angle) * -Player.FORCE_ACCELERATION;
+          this.ay = Math.sin(angle) * -Player.FORCE_ACCELERATION;
+        } else {
+          entity.ax = Math.cos(angle) * Player.FORCE_ACCELERATION;
+          entity.ay = Math.sin(angle) * Player.FORCE_ACCELERATION;
+        }
+        break;
+      } else {
+        this.decelerate();
+      }
+    }
+  } else if (this.isPulling) {
+    for (var entity of entities) {
+      if (entity.isOnPoint(this.lastMouseCoords.x, this.lastMouseCoords.y)) {
+        var angle = Math.atan2(entity.y - this.y, entity.x - this.x);
+        if (this.weight <= entity.weight) {
+          this.ax = Math.cos(angle) * Player.FORCE_ACCELERATION;
+          this.ay = Math.sin(angle) * Player.FORCE_ACCELERATION;
+        } else {
+          entity.ax = Math.cos(angle) * -Player.FORCE_ACCELERATION;
+          entity.ay = Math.sin(angle) * -Player.FORCE_ACCELERATION;
+        }
+        break;
+      } else {
+        this.decelerate();
+      }
+    }
+  } else {
+    this.decelerate();
+  }
+
+  for (var entity of entities) {
+    if (this.isCollidedWith(entity)) {
+      console.log('hi');
+      this.vx = 0;
+      this.vy = 0;
+      var angle = Math.atan2(entity.y - this.y, entity.x - this.x);
+      var minDistance = this.hitboxSize + entity.hitboxSize;
+      this.x = Math.cos(angle) * minDistance;
+      this.y = Math.sin(angle) * minDistance;
+    }
+  }
 };
 
 module.exports = Player;
