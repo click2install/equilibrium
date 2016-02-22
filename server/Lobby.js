@@ -170,7 +170,8 @@ Lobby.prototype.setReadyState = function(roomName, socketId, state) {
  */
 Lobby.prototype.isRoomReady = function(roomName) {
   var room = this.rooms.get(roomName);
-  if (room && room.users.values().length > 1) {
+  // todo remove >= when not test
+  if (room && room.users.values().length >= 1) {
     return room.users.values().reduce(function(previous, current,
                                                index, array) {
       return previous.ready && current.ready;
