@@ -13,7 +13,7 @@ function Game(socket, containerEl, canvasEl, drawing, viewport, endGame) {
   this.drawing = drawing;
   this.viewport = viewport;
   this.endGame = endGame;
-  this.self = {};
+  this.self = null;
   this.players = [];
   this.entities = [];
 }
@@ -76,21 +76,23 @@ Game.prototype.updateVars = function(data) {
  */
 Game.prototype.update = function() {
   with (this) {
-    viewport.update(self.x, self.y);
-    var coords = viewport.toAbsoluteCoords(Input.MOUSE);
-    client = {
-      self: self,
-      mouseX: coords[0],
-      mouseY: coords[1],
-      leftClick: Input.LEFT_CLICK,
-      rightClick: Input.RIGHT_CLICK
-    };      
-    socket.emit('player-action', {
-      mouseX: coords[0],
-      mouseY: coords[1],
-      leftClick: Input.LEFT_CLICK,
-      rightClick: Input.RIGHT_CLICK
-    });
+    if (self && Input.MOUSE['canvas']) {
+      viewport.update(self.x, self.y);
+      var coords = viewport.toAbsoluteCoords(Input.MOUSE['canvas']);
+      client = {
+        self: self,
+        mouseX: coords[0],
+        mouseY: coords[1],
+        leftClick: Input.LEFT_CLICK,
+        rightClick: Input.RIGHT_CLICK
+      };      
+      socket.emit('player-action', {
+        mouseX: coords[0],
+        mouseY: coords[1],
+        leftClick: Input.LEFT_CLICK,
+        rightClick: Input.RIGHT_CLICK
+      });
+    }
   }
 }
 

@@ -19,6 +19,7 @@ var game = Game.create(socket,
 // Initializes client interface with name input.
 $('document').ready(function() {
   lobby.hide();
+  $('#canvas-container').hide();
   $('#name-input').focus();
 
   $('#name-form').submit(function() {

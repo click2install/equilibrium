@@ -34,8 +34,6 @@ Input.onMouseUp = function(e) {
  * class to track user input.
  */
 Input.applyEventHandlers = function() {
-  window.addEventListener("touchstart", Input.onTouchStart);
-  window.addEventListener("touchend", Input.onTouchEnd);
   window.addEventListener("mousedown", Input.onMouseDown);
   window.addEventListener("mouseup", Input.onMouseUp);
 };
