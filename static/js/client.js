@@ -27,10 +27,14 @@ $('document').ready(function() {
     
     socket.emit('new-player', {
       name: name
+    }, function(data) {
+      if (data.success) {
+        $('#name-container').hide();
+        lobby.show();
+      } else {
+        window.alert(data.message);
+      }
     });
-
-    $('#name-container').hide();
-    lobby.show();
 
     return false;
   });
