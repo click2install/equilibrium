@@ -14,6 +14,20 @@ If you are able to hit another player with an object at high velocity, you
 will do damage to them. The goal of the game is to be able to kill the other
 player by hitting them while dodging away from their projectiles.
 
+# How To Play
+Upon joining the game, create a room with two or more friends and select
+"Ready" to prepare to play. Once all the players have confirmed their
+ready status, the game will begin. Left click to push on objects and right
+click to pull on them. Try to hit other players while dodging away from any
+objects they might push towards you. Objects that are larger than you are
+heavier, while objects that are smaller are lighter than you.
+
+* * *
+We were unable to implement many of the features that we wanted to
+due to the time constraint of the Koding hackathon. Even though we had a lot
+of fun designing and coding this game, it still lacks a healthbar system
+and you cannot yet damage other players.
+
 # Technical:
   - Made with NodeJS and Socket.IO
   - The states of all the objects are all instantiated, updated, and managed
