@@ -70,8 +70,10 @@ Entity.prototype.update = function() {
   } else {
     this.updateTimeDifference = currentTime - this.lastUpdateTime;
   }
-  this.vx += this.ax * this.updateTimeDifference;
-  this.vy += this.ay * this.updateTimeDifference;
+  this.vx = Util.bound(this.vx + this.ax * this.updateTimeDifference,
+                       -Constants.VELOCITY_CAP, Constants.VELOCITY_CAP);
+  this.vy = Util.bound(this.vy + this.ay * this.updateTimeDifference,
+                       -Constants.VELOCITY_CAP, Constants.VELOCITY_CAP);
   this.x = Util.bound(this.x + this.vx * this.updateTimeDifference,
                       Constants.WORLD_MIN, Constants.WORLD_MAX);
   this.y = Util.bound(this.y + this.vy * this.updateTimeDifference,

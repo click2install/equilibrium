@@ -18,6 +18,7 @@ Constants.CANVAS_HEIGHT = 600;
 Constants.WORLD_MIN = 0;
 Constants.WORLD_MAX = 1000;
 
+Constants.VELOCITY_CAP = 0.5;
 Constants.ENTITY_DECELERATION = 0.00025;
 
 try {
