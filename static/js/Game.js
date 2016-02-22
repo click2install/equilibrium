@@ -33,8 +33,8 @@ Game.create = function(socket, containerEl, endGame) {
     .prop('id', 'canvas')
     .prop('width', Constants.CANVAS_WIDTH)
     .prop('height', Constants.CANVAS_HEIGHT)
-    .on('contextmenu', function(e) {
-      e.stopPropagation();
+    .bind('contextmenu', function(e) {
+      e.preventDefault();
     });
   var drawing = Drawing.create(canvasEl[0].getContext('2d'));
   var viewport = Viewport.create();
@@ -102,7 +102,7 @@ Game.prototype.update = function() {
  * Draws the game to the canvas.
  */
 Game.prototype.draw = function() {
-  //this.drawing.clear();
+  this.drawing.clear();
   
   for (var player of this.players) {
     var coords = this.viewport.toCanvasCoords([player.x, player.y]);
