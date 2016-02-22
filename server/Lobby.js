@@ -42,8 +42,18 @@ Lobby.create = function() {
  * @param {string} username The username of the user.
  */
 Lobby.prototype.addUser = function(socketId, socket, username) {
-  this.freeSockets.set(socketId, socket);
-  this.freeUsers.set(socketId, username);
+  if (username) {
+    this.freeSockets.set(socketId, socket);
+    this.freeUsers.set(socketId, username);
+    return {
+      success: true,
+      message: "Lobby joined."
+    }
+  }
+  return {
+    success: false,
+    message: "Invalid name."
+  }
 };
 
 /**

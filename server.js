@@ -63,8 +63,9 @@ io.on('connection', function(socket) {
     });
   });
 
-  socket.on('new-player', function(data) {
-    lobby.addUser(socket.id, socket, data.name);
+  socket.on('new-player', function(data, callback) {
+    var status = lobby.addUser(socket.id, socket, data.name);
+    callback(status);
   });
 
   socket.on('create-room', function(data, callback) {
